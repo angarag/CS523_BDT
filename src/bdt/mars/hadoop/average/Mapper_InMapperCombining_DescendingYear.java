@@ -14,12 +14,12 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-public class InMapperCombining extends
-		Mapper<LongWritable, Text, Text, CustomPair> {
+public class Mapper_InMapperCombining_DescendingYear extends
+		Mapper<LongWritable, Text, CustomYear, CustomPair> {
 
-	private Text yeart = new Text();
+	private CustomYear yeart;
 	private CustomPair pair;
-	private HashMap<String,CustomPair> myMap = new HashMap<String,CustomPair> ();
+	private HashMap<String, CustomPair> myMap = new HashMap<String, CustomPair>();
 	private double tmp;
 
 	@Override
@@ -27,33 +27,31 @@ public class InMapperCombining extends
 			throws IOException, InterruptedException {
 		String val = value.toString();
 		String year = val.substring(15, 19);
-		yeart.set(year); 
+		yeart = new CustomYear(year);
 		double temperature = Double.parseDouble(val.substring(87, 92)) / 10;
 		// System.out.println(year+"-"+temp);
 
 		if (myMap.containsKey(year)) {
 			pair = myMap.get(year);
-			temperature+=pair.getTemp().get();
+			temperature += pair.getTemp().get();
 			pair.setTemp(temperature);
 			pair.setCount(pair.getCount().get() + 1);
-		} else{
-			System.out.println("new key");
-			pair=new CustomPair();
+		} else {
+			pair = new CustomPair();
 			pair.setTemp(temperature);
 			pair.setCount(1);
 		}
-		//System.out.println(year+": "+pair+year+"&"+temperature);
+		//System.out.println(yeart+": "+pair+year+"&"+temperature);
 		myMap.put(year, pair);
 	}
 
 	@Override
 	public void cleanup(Context context) throws IOException,
 			InterruptedException {
-		System.out.println("InMapperCombining: Emitting the hashmap");
+		System.out.println("InMapperCombining with descending years: Emitting the hashmap");
 		for (String w : myMap.keySet()) {
-			System.out.println(w+":"+myMap.get(w));
-			yeart.set(w);
-			context.write(yeart, (CustomPair)myMap.get(w));
+			System.out.println(w + ":" + myMap.get(w));
+			context.write(new CustomYear(w), (CustomPair) myMap.get(w));
 		}
 
 	}

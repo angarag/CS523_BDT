@@ -8,20 +8,22 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-public class Combiner extends Reducer<Text, CustomPair, Text, CustomPair> {
-	private CustomPair pair;
+public class Reducer_InMapperCombining_DescendingYear extends
+		Reducer<CustomYear, CustomPair, Text, DoubleWritable> {
+	private DoubleWritable result = new DoubleWritable();
 
 	@Override
-	public void reduce(Text key, Iterable<CustomPair> values, Context context)
+	public void reduce(CustomYear key, Iterable<CustomPair> values, Context context)
 			throws IOException, InterruptedException {
 		double sum = 0;
 		double count = 0;
-		System.out.println("Combiner invoked");
+
 		for (CustomPair val : values) {
 			sum += val.getTemp().get();
 			count += val.getCount().get();
 		}
-		pair = new CustomPair(sum, count);
-		context.write(key, pair);
+		System.out.println(key.toString() + "-" + sum / count);
+		result.set(sum / count);
+		context.write(new Text(key.toString()), result);
 	}
 }

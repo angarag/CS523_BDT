@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-public class RegularReducer extends
+public class Reducer_Regular extends
 		Reducer<Text, DoubleWritable, Text, DoubleWritable> {
 	private DoubleWritable result = new DoubleWritable();
 

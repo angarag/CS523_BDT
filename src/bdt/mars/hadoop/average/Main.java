@@ -41,22 +41,29 @@ public class Main extends Configured implements Tool {
 		Job job = new Job(getConf(), "WordCount");
 		job.setJarByClass(Main.class);
 		option = args[2];
-
+		System.out.println("Option " + option + " passed");
 		switch (option) {
 		case "2":
-			job.setMapperClass(RegularMapper.class);
-			job.setReducerClass(RegularReducer.class);
+			job.setMapperClass(Mapper_InMapperCombining.class);
+			job.setReducerClass(Reducer_InMapperCombining.class);
 			job.setCombinerClass(Combiner.class);
+			job.setOutputValueClass(CustomPair.class);
 			break;
 		case "3":
-			job.setMapperClass(InMapperCombining.class);
-			job.setReducerClass(ReducerForInMapperCombining.class);
+			job.setMapperClass(Mapper_InMapperCombining.class);
+			job.setReducerClass(Reducer_InMapperCombining.class);
+			job.setOutputValueClass(CustomPair.class);
+			break;
+		case "4":
+			job.setMapperClass(Mapper_InMapperCombining_DescendingYear.class);
+			job.setReducerClass(Reducer_InMapperCombining_DescendingYear.class);
+			job.setOutputKeyClass(CustomYear.class);
 			job.setOutputValueClass(CustomPair.class);
 			break;
 		default:// 1,4,5
 			System.out.println("default option passed");
-			job.setMapperClass(RegularMapper.class);
-			job.setReducerClass(RegularReducer.class);
+			job.setMapperClass(Mapper.class);
+			job.setReducerClass(Reducer.class);
 			job.setOutputValueClass(DoubleWritable.class);
 			break;
 		}

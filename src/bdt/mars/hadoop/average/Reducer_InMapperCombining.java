@@ -8,13 +8,13 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-public class ReducerForInMapperCombining extends
+public class Reducer_InMapperCombining extends
 		Reducer<Text, CustomPair, Text, DoubleWritable> {
 	private DoubleWritable result = new DoubleWritable();
 
 	@Override
-	public void reduce(Text key, Iterable<CustomPair> values,
-			Context context) throws IOException, InterruptedException {
+	public void reduce(Text key, Iterable<CustomPair> values, Context context)
+			throws IOException, InterruptedException {
 		double sum = 0;
 		double count = 0;
 

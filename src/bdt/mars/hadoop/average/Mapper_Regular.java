@@ -9,7 +9,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-public class RegularMapper extends
+public class Mapper_Regular extends
 		Mapper<LongWritable, Text, Text, DoubleWritable> {
 
 	private Text year = new Text();
@@ -21,7 +21,7 @@ public class RegularMapper extends
 		String val = value.toString();
 		String iyear = val.substring(15, 19);
 		Double itemp = Double.parseDouble(val.substring(87, 92)) / 10;
-		System.out.println(year+"-"+temp);
+		System.out.println(year + "-" + temp);
 		year.set(iyear);
 		temp.set(itemp);
 		context.write(year, temp);

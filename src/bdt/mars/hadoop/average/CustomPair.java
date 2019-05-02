@@ -17,14 +17,9 @@ public class CustomPair implements Writable {
 		count = new DoubleWritable();
 	}
 
-	public CustomPair(DoubleWritable t, DoubleWritable c) {
-		temp = t;
-		count = c;
-	}
-
-	public void set(DoubleWritable t, DoubleWritable c) {
-		temp = t;
-		count = c;
+	public CustomPair(double t, double c) {
+		temp = new DoubleWritable(t);
+		count = new DoubleWritable(c);
 	}
 
 	public DoubleWritable getTemp() {
@@ -59,8 +54,8 @@ public class CustomPair implements Writable {
 	}
 
 	@Override
-	public String toString(){
-		return temp.toString()+","+count.toString()+" ";
+	public String toString() {
+		return temp.toString() + "," + count.toString() + " ";
 	}
-	
+
 }
