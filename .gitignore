@@ -1,3 +1,6 @@
 .*
 !/.gitignore
 /bin/
+/input/
+/output/
+/target/
