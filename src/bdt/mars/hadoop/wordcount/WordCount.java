@@ -30,7 +30,7 @@ public class WordCount extends Configured implements Tool {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
-		fs.delete(new Path(args[2]), true);
+		fs.delete(new Path(args[1]), true);
 		int res = ToolRunner.run(conf, new WordCount(), args);
 		System.exit(res);
 	}
