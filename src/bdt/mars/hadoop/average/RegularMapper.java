@@ -9,17 +9,21 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-	public  class RegularMapper extends Mapper<LongWritable, Text, Text, DoubleWritable> {
+public class RegularMapper extends
+		Mapper<LongWritable, Text, Text, DoubleWritable> {
 
-	private final static IntWritable one = new IntWritable(1);
-	private Text word = new Text();
+	private Text year = new Text();
+	private DoubleWritable temp = new DoubleWritable();
 
 	@Override
-	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+	public void map(LongWritable key, Text value, Context context)
+			throws IOException, InterruptedException {
 		String val = value.toString();
-		String year = val.substring(15, 19);
-		Double temperature = Double.parseDouble(val.substring(87, 92));
-			word.set(year);
-			context.write(word, new DoubleWritable(temperature));
+		String iyear = val.substring(15, 19);
+		Double itemp = Double.parseDouble(val.substring(87, 92)) / 10;
+		System.out.println(year+"-"+temp);
+		year.set(iyear);
+		temp.set(itemp);
+		context.write(year, temp);
 	}
 }

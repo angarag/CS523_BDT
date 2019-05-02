@@ -18,7 +18,7 @@ public class ReducerD extends Reducer<Text, IntWritable, Text, IntWritable> {
 			sum += val.get();
 		}
 		result.set(sum);
-		if(sum>=25)
-		context.write(key, result);
+		if (sum >= 25)
+			context.write(key, result);
 	}
 }

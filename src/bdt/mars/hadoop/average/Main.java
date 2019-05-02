@@ -6,6 +6,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -18,12 +19,11 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.MapWritable;
 
-public class Average extends Configured implements Tool {
+public class Main extends Configured implements Tool {
 
 	public static String option = "a";
 
@@ -31,7 +31,7 @@ public class Average extends Configured implements Tool {
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
 		fs.delete(new Path(args[1]), true);
-		int res = ToolRunner.run(conf, new Average(), args);
+		int res = ToolRunner.run(conf, new Main(), args);
 		System.exit(res);
 	}
 
@@ -39,33 +39,31 @@ public class Average extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 
 		Job job = new Job(getConf(), "WordCount");
-		job.setJarByClass(Average.class);
+		job.setJarByClass(Main.class);
 		option = args[2];
 
 		switch (option) {
-//		case "1":
-//			job.setMapperClass(MapperC.class);
-//			job.setReducerClass(RegularReducer.class);
-//			break;
-//		case "2":
-//			job.setMapperClass(RegularMapper.class);
-//			job.setReducerClass(ReducerD.class);
-//			break;
-//		case "3":
-//			job.setMapperClass(RegularMapper.class);
-//			job.setReducerClass(ReducerE.class);
-//			break;
-		default://4,5
+		case "2":
 			job.setMapperClass(RegularMapper.class);
 			job.setReducerClass(RegularReducer.class);
+			job.setCombinerClass(Combiner.class);
+			break;
+		case "3":
+			job.setMapperClass(InMapperCombining.class);
+			job.setReducerClass(ReducerForInMapperCombining.class);
+			job.setOutputValueClass(CustomPair.class);
+			break;
+		default:// 1,4,5
+			System.out.println("default option passed");
+			job.setMapperClass(RegularMapper.class);
+			job.setReducerClass(RegularReducer.class);
+			job.setOutputValueClass(DoubleWritable.class);
 			break;
 		}
 
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
 
 		job.setInputFormatClass(TextInputFormat.class);
-		job.setOutputFormatClass(TextOutputFormat.class);
 		// Q2-b
 		if (option.equals("5"))
 			job.setNumReduceTasks(2);

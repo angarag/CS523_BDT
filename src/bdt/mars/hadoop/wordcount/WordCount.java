@@ -55,7 +55,7 @@ public class WordCount extends Configured implements Tool {
 			job.setMapperClass(RegularMapper.class);
 			job.setReducerClass(ReducerE.class);
 			break;
-		default://a & b
+		default:// a & b
 			job.setMapperClass(RegularMapper.class);
 			job.setReducerClass(RegularReducer.class);
 			break;

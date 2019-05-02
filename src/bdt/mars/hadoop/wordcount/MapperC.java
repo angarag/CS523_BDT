@@ -14,7 +14,8 @@ public class MapperC extends Mapper<LongWritable, Text, Text, IntWritable> {
 	private Text word = new Text();
 
 	@Override
-	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+	public void map(LongWritable key, Text value, Context context)
+			throws IOException, InterruptedException {
 		for (String token : value.toString().split("\\s+")) {
 			// Q2-c
 			token = token.toLowerCase();
@@ -25,4 +26,3 @@ public class MapperC extends Mapper<LongWritable, Text, Text, IntWritable> {
 		}
 	}
 }
-
