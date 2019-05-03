@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average;
+package bdt.mars.hadoop.average.P2;
 
 import java.io.IOException;
 
@@ -8,7 +8,9 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-public class Reducer_InMapperCombining extends
+import bdt.mars.hadoop.average.CustomPair;
+
+public class Reducer2 extends
 		Reducer<Text, CustomPair, Text, DoubleWritable> {
 	private DoubleWritable result = new DoubleWritable();
 

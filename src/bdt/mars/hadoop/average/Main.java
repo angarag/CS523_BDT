@@ -23,6 +23,16 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.MapWritable;
 
+import bdt.mars.hadoop.average.P1.Mapper_Regular;
+import bdt.mars.hadoop.average.P1.Reducer_Regular;
+import bdt.mars.hadoop.average.P2.Combiner;
+import bdt.mars.hadoop.average.P2.Mapper2;
+import bdt.mars.hadoop.average.P2.Reducer2;
+import bdt.mars.hadoop.average.P3.Mapper_InMapperCombining;
+import bdt.mars.hadoop.average.P3.Reducer_InMapperCombining;
+import bdt.mars.hadoop.average.P4.Mapper_InMapperCombining_DescendingYear;
+import bdt.mars.hadoop.average.P4.Reducer_InMapperCombining_DescendingYear;
+
 public class Main extends Configured implements Tool {
 
 	public static String option = "a";
@@ -43,18 +53,37 @@ public class Main extends Configured implements Tool {
 		option = args[2];
 		System.out.println("Option " + option + " passed");
 		switch (option) {
+		case "1":
+			job.setMapperClass(Mapper_Regular.class);
+			job.setReducerClass(Reducer_Regular.class);
+			job.setOutputKeyClass(Text.class);
+			job.setOutputValueClass(DoubleWritable.class);
+			break;
 		case "2":
-			job.setMapperClass(Mapper_InMapperCombining.class);
-			job.setReducerClass(Reducer_InMapperCombining.class);
+			job.setMapperClass(Mapper2.class);
+			job.setReducerClass(Reducer2.class);
 			job.setCombinerClass(Combiner.class);
+			job.setOutputKeyClass(Text.class);
 			job.setOutputValueClass(CustomPair.class);
 			break;
 		case "3":
 			job.setMapperClass(Mapper_InMapperCombining.class);
 			job.setReducerClass(Reducer_InMapperCombining.class);
+			job.setOutputKeyClass(Text.class);
 			job.setOutputValueClass(CustomPair.class);
 			break;
 		case "4":
+			job.setJarByClass(CustomPair.class);
+			job.setJarByClass(CustomYear.class);
+			job.setMapperClass(Mapper_InMapperCombining_DescendingYear.class);
+			job.setReducerClass(Reducer_InMapperCombining_DescendingYear.class);
+//			job.setMapOutputKeyClass(CustomYear.class);
+//			job.setMapOutputValueClass(CustomPair.class);
+			job.setOutputKeyClass(CustomYear.class);
+			job.setOutputValueClass(CustomPair.class);
+			break;
+		case "5":
+			job.setNumReduceTasks(2);
 			job.setMapperClass(Mapper_InMapperCombining_DescendingYear.class);
 			job.setReducerClass(Reducer_InMapperCombining_DescendingYear.class);
 			job.setOutputKeyClass(CustomYear.class);
@@ -62,18 +91,14 @@ public class Main extends Configured implements Tool {
 			break;
 		default:// 1,4,5
 			System.out.println("default option passed");
-			job.setMapperClass(Mapper.class);
-			job.setReducerClass(Reducer.class);
+			job.setMapperClass(Mapper_Regular.class);
+			job.setReducerClass(Reducer_Regular.class);
+			job.setOutputKeyClass(Text.class);
 			job.setOutputValueClass(DoubleWritable.class);
 			break;
 		}
 
-		job.setOutputKeyClass(Text.class);
-
 		job.setInputFormatClass(TextInputFormat.class);
-		// Q2-b
-		if (option.equals("5"))
-			job.setNumReduceTasks(2);
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		return job.waitForCompletion(true) ? 0 : 1;

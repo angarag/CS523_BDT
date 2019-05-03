@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average;
+package bdt.mars.hadoop.average.P2;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,12 +14,13 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-public class Mapper_InMapperCombining extends
+import bdt.mars.hadoop.average.CustomPair;
+
+public class Mapper2 extends
 		Mapper<LongWritable, Text, Text, CustomPair> {
 
 	private Text yeart = new Text();
 	private CustomPair pair;
-	private HashMap<String, CustomPair> myMap = new HashMap<String, CustomPair>();
 	private double tmp;
 
 	@Override
@@ -29,31 +30,11 @@ public class Mapper_InMapperCombining extends
 		String year = val.substring(15, 19);
 		yeart.set(year);
 		double temperature = Double.parseDouble(val.substring(87, 92)) / 10;
-		// System.out.println(year+"-"+temp);
-
-		if (myMap.containsKey(year)) {
-			pair = myMap.get(year);
-			temperature += pair.getTemp().get();
-			pair.setTemp(temperature);
-			pair.setCount(pair.getCount().get() + 1);
-		} else {
 			pair = new CustomPair();
 			pair.setTemp(temperature);
 			pair.setCount(1);
-		}
-		// System.out.println(year+": "+pair+year+"&"+temperature);
-		myMap.put(year, pair);
+		context.write(yeart,pair);
 	}
 
-	@Override
-	public void cleanup(Context context) throws IOException,
-			InterruptedException {
-		System.out.println("InMapperCombining: Emitting the hashmap");
-		for (String w : myMap.keySet()) {
-			System.out.println(w + ":" + myMap.get(w));
-			yeart.set(w);
-			context.write(yeart, (CustomPair) myMap.get(w));
-		}
 
-	}
 }

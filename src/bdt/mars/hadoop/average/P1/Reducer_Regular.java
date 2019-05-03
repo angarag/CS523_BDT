@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average;
+package bdt.mars.hadoop.average.P1;
 
 import java.io.IOException;
 
@@ -8,22 +8,22 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-public class Reducer_InMapperCombining_DescendingYear extends
-		Reducer<CustomYear, CustomPair, Text, DoubleWritable> {
+public class Reducer_Regular extends
+		Reducer<Text, DoubleWritable, Text, DoubleWritable> {
 	private DoubleWritable result = new DoubleWritable();
 
 	@Override
-	public void reduce(CustomYear key, Iterable<CustomPair> values, Context context)
-			throws IOException, InterruptedException {
+	public void reduce(Text key, Iterable<DoubleWritable> values,
+			Context context) throws IOException, InterruptedException {
 		double sum = 0;
 		double count = 0;
 
-		for (CustomPair val : values) {
-			sum += val.getTemp().get();
-			count += val.getCount().get();
+		for (DoubleWritable val : values) {
+			sum += val.get();
+			count += 1;
 		}
 		System.out.println(key.toString() + "-" + sum / count);
 		result.set(sum / count);
-		context.write(new Text(key.toString()), result);
+		context.write(key, result);
 	}
 }

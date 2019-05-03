@@ -5,12 +5,16 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
-public class CustomYear implements WritableComparable {
+public class CustomYear implements Writable,WritableComparable<CustomYear> {
 
-	Text year;
+	private Text year;
 
+	public CustomYear(){
+		year=new Text();
+	}
 	public CustomYear(String year) {
 		this.year = new Text(year);
 	}
@@ -28,27 +32,39 @@ public class CustomYear implements WritableComparable {
 
 	}
 
-	@Override
-	public int compareTo(Object o) {
-		String thisValue = this.year.toString();
-		String thatValue = ((CustomYear) o).year.toString();
-		return thatValue.compareTo(thisValue);
+	public Text getYear() {
+		return year;
 	}
 
+	public void setYear(String year) {
+		this.year = new Text(year);
+	}
+
+	@Override
+	public int compareTo(CustomYear o) {
+		//System.out.println("CustomYear: compareTo called");
+		
+		String thatValue =  o.getYear().toString();
+		return thatValue.compareTo(this.getYear().toString());
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + year.toString().hashCode();
+		int result = 17;
+		result = prime * result + this.year.toString().hashCode();
+		//System.out.println("CustomYear: hashCode called " + result);
 		return result;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj){
-		if(this==obj)
+	public boolean equals(Object obj) {
+		//System.out.println("CustomYear: equals called");
+		if (this == obj)
 			return true;
-		if(obj instanceof Text){
-			String str = ((Text)obj).toString();
-			return year.toString().equals(str);
+		if (obj instanceof CustomYear) {
+			String str = ((CustomYear) obj).getYear().toString();
+			return this.year.toString().equals(str);
 		}
 		return false;
 	}
@@ -57,5 +73,6 @@ public class CustomYear implements WritableComparable {
 	public String toString() {
 		return this.year.toString();
 	}
+
 
 }

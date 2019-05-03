@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average;
+package bdt.mars.hadoop.average.P2;
 
 import java.io.IOException;
 
@@ -7,6 +7,8 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
+
+import bdt.mars.hadoop.average.CustomPair;
 
 public class Combiner extends Reducer<Text, CustomPair, Text, CustomPair> {
 	private CustomPair pair;
