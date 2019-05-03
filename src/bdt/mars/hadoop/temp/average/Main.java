@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average;
+package bdt.mars.hadoop.temp.average;
 
 import java.util.StringTokenizer;
 
@@ -23,15 +23,15 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.MapWritable;
 
-import bdt.mars.hadoop.average.P1.Mapper_Regular;
-import bdt.mars.hadoop.average.P1.Reducer_Regular;
-import bdt.mars.hadoop.average.P2.Combiner;
-import bdt.mars.hadoop.average.P2.Mapper2;
-import bdt.mars.hadoop.average.P2.Reducer2;
-import bdt.mars.hadoop.average.P3.Mapper_InMapperCombining;
-import bdt.mars.hadoop.average.P3.Reducer_InMapperCombining;
-import bdt.mars.hadoop.average.P4.Mapper_InMapperCombining_DescendingYear;
-import bdt.mars.hadoop.average.P4.Reducer_InMapperCombining_DescendingYear;
+import bdt.mars.hadoop.temp.average.P1.Mapper_Regular;
+import bdt.mars.hadoop.temp.average.P1.Reducer_Regular;
+import bdt.mars.hadoop.temp.average.P2.Combiner;
+import bdt.mars.hadoop.temp.average.P2.Mapper2;
+import bdt.mars.hadoop.temp.average.P2.Reducer2;
+import bdt.mars.hadoop.temp.average.P3.Mapper_InMapperCombining;
+import bdt.mars.hadoop.temp.average.P3.Reducer_InMapperCombining;
+import bdt.mars.hadoop.temp.average.P4.Mapper_InMapperCombining_DescendingYear;
+import bdt.mars.hadoop.temp.average.P4.Reducer_InMapperCombining_DescendingYear;
 
 public class Main extends Configured implements Tool {
 

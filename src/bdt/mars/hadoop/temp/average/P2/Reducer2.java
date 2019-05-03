@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average.P2;
+package bdt.mars.hadoop.temp.average.P2;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-import bdt.mars.hadoop.average.CustomPair;
+import bdt.mars.hadoop.temp.average.CustomPair;
 
 public class Reducer2 extends Reducer<Text, CustomPair, Text, DoubleWritable> {
 	private DoubleWritable result = new DoubleWritable();

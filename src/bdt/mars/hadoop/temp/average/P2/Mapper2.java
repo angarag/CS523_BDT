@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average.P2;
+package bdt.mars.hadoop.temp.average.P2;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-import bdt.mars.hadoop.average.CustomPair;
+import bdt.mars.hadoop.temp.average.CustomPair;
 
 public class Mapper2 extends Mapper<LongWritable, Text, Text, CustomPair> {
 

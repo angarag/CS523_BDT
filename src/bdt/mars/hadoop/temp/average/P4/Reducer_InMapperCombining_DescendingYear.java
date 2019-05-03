@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average.P4;
+package bdt.mars.hadoop.temp.average.P4;
 
 import java.io.IOException;
 
@@ -9,8 +9,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-import bdt.mars.hadoop.average.CustomPair;
-import bdt.mars.hadoop.average.CustomYear;
+import bdt.mars.hadoop.temp.average.CustomPair;
+import bdt.mars.hadoop.temp.average.CustomYear;
 
 public class Reducer_InMapperCombining_DescendingYear extends
 		Reducer<CustomYear, CustomPair, CustomYear, DoubleWritable> {

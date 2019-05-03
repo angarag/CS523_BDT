@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average.P1;
+package bdt.mars.hadoop.temp.average.P1;
 
 import java.io.IOException;
 

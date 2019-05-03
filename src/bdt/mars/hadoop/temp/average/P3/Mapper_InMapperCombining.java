@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average.P4;
+package bdt.mars.hadoop.temp.average.P3;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,15 +14,14 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-import bdt.mars.hadoop.average.CustomPair;
-import bdt.mars.hadoop.average.CustomYear;
+import bdt.mars.hadoop.temp.average.CustomPair;
 
-public class Mapper_InMapperCombining_DescendingYear extends
-		Mapper<LongWritable, Text, CustomYear, CustomPair> {
+public class Mapper_InMapperCombining extends
+		Mapper<LongWritable, Text, Text, CustomPair> {
 
+	private Text yeart = new Text();
 	private CustomPair pair;
-	private CustomYear cyear;
-	private HashMap<CustomYear, CustomPair> myMap = new HashMap<CustomYear, CustomPair>();
+	private HashMap<String, CustomPair> myMap = new HashMap<String, CustomPair>();
 	private double tmp;
 
 	@Override
@@ -30,12 +29,12 @@ public class Mapper_InMapperCombining_DescendingYear extends
 			throws IOException, InterruptedException {
 		String val = value.toString();
 		String year = val.substring(15, 19);
-		cyear = new CustomYear(year);
+		yeart.set(year);
 		double temperature = Double.parseDouble(val.substring(87, 92)) / 10;
 		// System.out.println(year+"-"+temp);
 
-		if (myMap.containsKey(cyear)) {
-			pair = myMap.get(cyear);
+		if (myMap.containsKey(year)) {
+			pair = myMap.get(year);
 			temperature += pair.getTemp().get();
 			pair.setTemp(temperature);
 			pair.setCount(pair.getCount().get() + 1);
@@ -44,21 +43,18 @@ public class Mapper_InMapperCombining_DescendingYear extends
 			pair.setTemp(temperature);
 			pair.setCount(1);
 		}
-		// System.out.println(yeart+": "+pair+year+"&"+temperature);
-		myMap.put(cyear, pair);
+		// System.out.println(year + ": " + pair + year + "&" + temperature);
+		myMap.put(year, pair);
 	}
 
 	@Override
 	public void cleanup(Context context) throws IOException,
 			InterruptedException {
-
-		// for (CustomYear w : myMap.keySet()) {
-		// System.out.println(w + ":" + myMap.get(w));
-		// }
-		// System.out.println("InMapperCombining with descending years: Finished emitting the years");
-		for (CustomYear w : myMap.keySet()) {
-			context.write(new CustomYear(w.getYear().toString()), myMap.get(w));
-			// System.out.println("emitting to reducer");
+		System.out.println("InMapperCombining: Emitting the hashmap");
+		for (String w : myMap.keySet()) {
+			System.out.println(w + ":" + myMap.get(w));
+			yeart.set(w);
+			context.write(yeart, (CustomPair) myMap.get(w));
 		}
 
 	}

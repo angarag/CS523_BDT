@@ -1,4 +1,4 @@
-package bdt.mars.hadoop.average;
+package bdt.mars.hadoop.temp.average;
 
 import java.io.DataInput;
 import java.io.DataOutput;
