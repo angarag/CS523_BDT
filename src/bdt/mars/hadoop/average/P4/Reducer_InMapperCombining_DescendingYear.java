@@ -17,15 +17,16 @@ public class Reducer_InMapperCombining_DescendingYear extends
 	private DoubleWritable result = new DoubleWritable();
 
 	@Override
-	public void setup(Context context){
-		System.out.println("Reducer started");
+	public void setup(Context context) {
+		// System.out.println("Reducer started");
 	}
+
 	@Override
 	public void reduce(CustomYear key, Iterable<CustomPair> values,
 			Context context) throws IOException, InterruptedException {
 		double sum = 0;
 		double count = 0;
-		
+
 		for (CustomPair val : values) {
 			sum += val.getTemp().get();
 			count += val.getCount().get();
@@ -34,9 +35,10 @@ public class Reducer_InMapperCombining_DescendingYear extends
 		result.set(sum / count);
 		context.write(key, result);
 	}
-//	@Override
-//	public void cleanup(Context context) throws IOException, InterruptedException{
-//		context.write(new Text("done"),result);
-//		System.out.println("Reducer: I'm done");
-//	}
+	// @Override
+	// public void cleanup(Context context) throws IOException,
+	// InterruptedException{
+	// context.write(new Text("done"),result);
+	// System.out.println("Reducer: I'm done");
+	// }
 }

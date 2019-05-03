@@ -43,7 +43,7 @@ public class Mapper_InMapperCombining extends
 			pair.setTemp(temperature);
 			pair.setCount(1);
 		}
-		//System.out.println(year + ": " + pair + year + "&" + temperature);
+		// System.out.println(year + ": " + pair + year + "&" + temperature);
 		myMap.put(year, pair);
 	}
 

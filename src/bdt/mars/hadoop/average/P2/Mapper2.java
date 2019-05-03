@@ -16,8 +16,7 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 
 import bdt.mars.hadoop.average.CustomPair;
 
-public class Mapper2 extends
-		Mapper<LongWritable, Text, Text, CustomPair> {
+public class Mapper2 extends Mapper<LongWritable, Text, Text, CustomPair> {
 
 	private Text yeart = new Text();
 	private CustomPair pair;
@@ -30,11 +29,10 @@ public class Mapper2 extends
 		String year = val.substring(15, 19);
 		yeart.set(year);
 		double temperature = Double.parseDouble(val.substring(87, 92)) / 10;
-			pair = new CustomPair();
-			pair.setTemp(temperature);
-			pair.setCount(1);
-		context.write(yeart,pair);
+		pair = new CustomPair();
+		pair.setTemp(temperature);
+		pair.setCount(1);
+		context.write(yeart, pair);
 	}
-
 
 }

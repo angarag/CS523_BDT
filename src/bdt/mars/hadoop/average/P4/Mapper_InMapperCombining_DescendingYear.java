@@ -52,14 +52,14 @@ public class Mapper_InMapperCombining_DescendingYear extends
 	public void cleanup(Context context) throws IOException,
 			InterruptedException {
 
+		// for (CustomYear w : myMap.keySet()) {
+		// System.out.println(w + ":" + myMap.get(w));
+		// }
+		// System.out.println("InMapperCombining with descending years: Finished emitting the years");
 		for (CustomYear w : myMap.keySet()) {
-			System.out.println(w + ":" + myMap.get(w));
-		}
-		System.out.println("InMapperCombining with descending years: Finished emitting the years");
-		for (CustomYear w : myMap.keySet()) {
-			 context.write(new CustomYear(w.getYear().toString()),  myMap.get(w));
+			context.write(new CustomYear(w.getYear().toString()), myMap.get(w));
 			// System.out.println("emitting to reducer");
 		}
-		
+
 	}
 }

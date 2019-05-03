@@ -10,8 +10,7 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 
 import bdt.mars.hadoop.average.CustomPair;
 
-public class Reducer2 extends
-		Reducer<Text, CustomPair, Text, DoubleWritable> {
+public class Reducer2 extends Reducer<Text, CustomPair, Text, DoubleWritable> {
 	private DoubleWritable result = new DoubleWritable();
 
 	@Override

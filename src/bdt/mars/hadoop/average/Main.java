@@ -77,8 +77,8 @@ public class Main extends Configured implements Tool {
 			job.setJarByClass(CustomYear.class);
 			job.setMapperClass(Mapper_InMapperCombining_DescendingYear.class);
 			job.setReducerClass(Reducer_InMapperCombining_DescendingYear.class);
-//			job.setMapOutputKeyClass(CustomYear.class);
-//			job.setMapOutputValueClass(CustomPair.class);
+			// job.setMapOutputKeyClass(CustomYear.class);
+			// job.setMapOutputValueClass(CustomPair.class);
 			job.setOutputKeyClass(CustomYear.class);
 			job.setOutputValueClass(CustomPair.class);
 			break;
@@ -86,6 +86,8 @@ public class Main extends Configured implements Tool {
 			job.setNumReduceTasks(2);
 			job.setMapperClass(Mapper_InMapperCombining_DescendingYear.class);
 			job.setReducerClass(Reducer_InMapperCombining_DescendingYear.class);
+			// set partitioner statement
+			job.setPartitionerClass(CustomPartitioner.class);
 			job.setOutputKeyClass(CustomYear.class);
 			job.setOutputValueClass(CustomPair.class);
 			break;
