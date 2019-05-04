@@ -52,6 +52,8 @@ public class Main extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 
 		Job job = new Job(getConf(), "Custom sort for temperature");
+		job.getConfiguration().set("mapreduce.output.basename", "StationTempRecord");
+
 		job.setJarByClass(Main.class);
 
 		job.setMapperClass(Mapper_Custom.class);
@@ -60,7 +62,6 @@ public class Main extends Configured implements Tool {
 		job.setOutputValueClass(Text.class);
 
 		job.setInputFormatClass(TextInputFormat.class);
-		job.getConfiguration().set("mapreduce.output.basename", "StationTempRecord");
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		if(job.waitForCompletion(true)==true) {
