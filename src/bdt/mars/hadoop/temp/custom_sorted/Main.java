@@ -16,6 +16,8 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.LazyOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
@@ -57,8 +59,17 @@ public class Main extends Configured implements Tool {
 		job.setOutputValueClass(Text.class);
 
 		job.setInputFormatClass(TextInputFormat.class);
+		
+		LazyOutputFormat.setOutputFormatClass(job, TextOutputFormat.class);
+		MultipleOutputs.addNamedOutput(job,"Mars", TextOutputFormat.class, Text.class, IntWritable.class);
+		
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
-		return job.waitForCompletion(true) ? 0 : 1;
+		if(job.waitForCompletion(true)==true) {
+			FileSystem fs = FileSystem.get(new Configuration());
+			fs.rename(new Path(args[1]+"/part-r-00000"), new Path(args[1]+"/custom"));
+			fs.delete(new Path(args[1]), true);
+			return 0;
+		}else return 1;
 	}
 }
