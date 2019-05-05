@@ -10,6 +10,7 @@ import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.mapreduce.AvroKeyValueOutputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -21,7 +22,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class WordCountTotalAvro extends Configured implements Tool
+public class AvroWordCount extends Configured implements Tool
 {
 
 	public static class AvroWordCountMapper extends Mapper<LongWritable, Text, AvroKey<String>, AvroValue<Integer>>
@@ -59,7 +60,7 @@ public class WordCountTotalAvro extends Configured implements Tool
 		}
 
 		Job job = Job.getInstance();
-		job.setJarByClass(WordCountTotalAvro.class);
+		job.setJarByClass(AvroWordCount.class);
 		job.setJobName("WordCountTotalAvro");
 
 		FileInputFormat.setInputPaths(job, new Path(args[0]));
@@ -83,7 +84,9 @@ public class WordCountTotalAvro extends Configured implements Tool
 
 	public static void main(String[] args) throws Exception
 	{
-		int res = ToolRunner.run(new Configuration(), new WordCountTotalAvro(), args);
+		Configuration conf = new Configuration();
+		FileSystem.get(conf).delete(new Path("output"), true);
+		int res = ToolRunner.run(new Configuration(), new AvroWordCount(), args);
 		System.exit(res);
 	}
 }

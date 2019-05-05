@@ -25,7 +25,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class AvroGenericStationTempYear extends Configured implements Tool {
+public class AvroMaxTemperature extends Configured implements Tool {
 
 	private static Schema SCHEMA;
 
@@ -43,7 +43,7 @@ public class AvroGenericStationTempYear extends Configured implements Tool {
 				record.put("stationId", utils.getStationId());
 				record.put("temperature", utils.getAirTemperature());
 				record.put("year", utils.getYearInt());
-				System.out.println("mapper emitted");
+				System.out.println("mapper emitted"+record.toString());
 				context.write(new AvroKey<GenericRecord>(record),
 						NullWritable.get());
 
@@ -54,13 +54,19 @@ public class AvroGenericStationTempYear extends Configured implements Tool {
 	public static class AvroReducer
 			extends
 			Reducer<AvroKey<GenericRecord>, NullWritable, AvroKey<GenericRecord>, NullWritable> {
+		private String prevYear="";
+		private String currentYear="";
 		@Override
 		protected void reduce(AvroKey<GenericRecord> key,
 				Iterable<NullWritable> values, Context context)
 				throws IOException, InterruptedException {
 			System.out.println(key.toString());
 			// Emit reducer output here
-			context.write(key, NullWritable.get());// added by mars
+			currentYear=key.datum().get("year").toString();
+			if(currentYear.compareTo(prevYear)!=0)
+				context.write(key, NullWritable.get());// added by mars
+			System.out.println(prevYear+" vs "+currentYear);
+			prevYear=currentYear;
 
 		}
 	}
@@ -75,7 +81,7 @@ public class AvroGenericStationTempYear extends Configured implements Tool {
 		}
 
 		Job job = Job.getInstance();
-		job.setJarByClass(AvroGenericStationTempYear.class);
+		job.setJarByClass(AvroMaxTemperature.class);
 		job.setJobName("Avro Station-Temp-Year");
 
 		FileInputFormat.addInputPath(job, new Path(args[0]));
@@ -107,7 +113,7 @@ public class AvroGenericStationTempYear extends Configured implements Tool {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		FileSystem.get(conf).delete(new Path("output"), true);
-		int res = ToolRunner.run(conf, new AvroGenericStationTempYear(), args);
+		int res = ToolRunner.run(conf, new AvroMaxTemperature(), args);
 		System.exit(res);
 	}
 }
