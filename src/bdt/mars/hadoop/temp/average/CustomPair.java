@@ -38,14 +38,14 @@ public class CustomPair implements Writable {
 		this.count = new DoubleWritable(count);
 	}
 
-	@Override
+	//@Override
 	public void readFields(DataInput arg0) throws IOException {
 		temp.readFields(arg0);
 		count.readFields(arg0);
 
 	}
 
-	@Override
+	//@Override
 	public void write(DataOutput arg0) throws IOException {
 		// TODO Auto-generated method stub
 		temp.write(arg0);

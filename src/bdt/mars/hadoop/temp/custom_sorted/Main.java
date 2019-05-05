@@ -48,7 +48,6 @@ public class Main extends Configured implements Tool {
 		System.exit(res);
 	}
 
-	@Override
 	public int run(String[] args) throws Exception {
 
 		Job job = new Job(getConf(), "Custom sort for temperature");

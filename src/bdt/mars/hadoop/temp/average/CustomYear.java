@@ -20,13 +20,13 @@ public class CustomYear implements Writable, WritableComparable<CustomYear> {
 		this.year = new Text(year);
 	}
 
-	@Override
+	//@Override
 	public void readFields(DataInput arg0) throws IOException {
 		year.readFields(arg0);
 
 	}
 
-	@Override
+	//@Override
 	public void write(DataOutput arg0) throws IOException {
 		// TODO Auto-generated method stub
 		year.write(arg0);
@@ -41,7 +41,7 @@ public class CustomYear implements Writable, WritableComparable<CustomYear> {
 		this.year = new Text(year);
 	}
 
-	@Override
+	//@Override
 	public int compareTo(CustomYear o) {
 		// System.out.println("CustomYear: compareTo called");
 
