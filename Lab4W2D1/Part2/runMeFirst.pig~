@@ -1,0 +1,4 @@
+mkdir input
+copyFromLocal MovieDataSet/users.txt input/
+copyFromLocal MovieDataSet/rating.txt input/
+copyFromLocal MovieDataSet/movies.csv input/
