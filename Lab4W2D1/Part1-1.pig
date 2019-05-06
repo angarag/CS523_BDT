@@ -4,5 +4,5 @@ words = FOREACH wordsBag GENERATE flatten(lineBag);
 temp = GROUP words BY token;
 counts = FOREACH temp GENERATE group, COUNT(words) as count;
 ordered = order counts by count desc;
-store ordered into 'output' using PigStorage(',');
+store ordered into 'output1' using PigStorage(',');
 
