@@ -1,0 +1,10 @@
+input_lines = load 'countMyWords.txt' as (line:chararray);
+wordsBag = FOREACH input_lines GENERATE TOKENIZE(line) as lineBag;
+words = FOREACH wordsBag GENERATE flatten(lineBag);
+temp = GROUP words BY token;
+counts = FOREACH temp GENERATE group, COUNT(words) as count;
+ordered = order counts by count desc;
+//top5 = LIMIT ordered 5;
+store ordered into 'lab4-output' using PigStorage(',');
+//dump ordered;
+
