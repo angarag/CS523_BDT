@@ -21,8 +21,9 @@ user_ids = FOREACH fltrd GENERATE $0;
 joined = JOIN rating_input BY $0, user_ids BY $0;
 programmer_ratings = FOREACH joined GENERATE $0,$1,$2;
 programmer_ratings_for_top20 = JOIN programmer_ratings BY $1, q4_result BY $0;
-result_grouped = GROUP programmer_ratings_for_top20  ALL;
+result_grouped = GROUP programmer_ratings_for_top20 ALL;
 result = FOREACH result_grouped GENERATE COUNT($1);
+STORE result INTO 'output' USING CSVExcelStorage();
 dump result;
 
 
