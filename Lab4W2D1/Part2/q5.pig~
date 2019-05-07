@@ -13,8 +13,17 @@ joined_fltrd = FILTER joined BY SIZE(TOTUPLE(*))>2;
 rdcd = FOREACH joined_fltrd GENERATE $0, FLATTEN($1.$1) as title, COUNT($2.$0) as count;
 formatted = FOREACH rdcd GENERATE $0 as movieId;
 pre_result = ORDER formatted BY $0;
-result = LIMIT pre_result 20;
-inlist = GROUP result ALL;
-input_to_q5 = FOREACH inlist GENERATE $1;
+q4_result = LIMIT pre_result 20;
+
+q1 = load 'MovieDataSet/users.txt' using PigStorage('|') as (rid:int,age:int,sex:chararray,occupation:chararray,id:int);
+fltrd = FILTER q1 BY (sex=='M') AND (occupation=='programmer');
+user_ids = FOREACH fltrd GENERATE $0;
+joined = JOIN rating_input BY $0, user_ids BY $0;
+programmer_ratings = FOREACH joined GENERATE $0,$1,$2;
+programmer_ratings_for_top20 = JOIN programmer_ratings BY $1, q4_result BY $0;
+result_grouped = GROUP programmer_ratings_for_top20  ALL;
+result = FOREACH result_grouped GENERATE COUNT($1);
+dump result;
+
 
 

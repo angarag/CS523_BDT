@@ -14,5 +14,5 @@ rdcd = FOREACH joined_fltrd GENERATE $0, FLATTEN($1.$1) as title, COUNT($2.$0) a
 formatted = FOREACH rdcd GENERATE $0 as movieId, 'Adventure' as genres, '5' as rating, $1 as title;
 pre_result = ORDER formatted BY $0;
 result = LIMIT pre_result 20;
-store result into 'output' using CSVExcelStorage;
+STORE result INTO 'output' USING CSVExcelStorage;
 dump result;

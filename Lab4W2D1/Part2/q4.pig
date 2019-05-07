@@ -1,6 +1,7 @@
 REGISTER /usr/lib/pig/piggybank.jar;
+DEFINE CSVLoader org.apache.pig.piggybank.storage.CSVLoader();
 DEFINE CSVExcelStorage org.apache.pig.piggybank.storage.CSVExcelStorage('\t','NO_MULTILINE','UNIX','WRITE_OUTPUT_HEADER'); 
-temp = load 'MovieDataSet/movies.csv' using CSVExcelStorage() as (rid:int,title:chararray,genres:chararray);
+temp = load 'MovieDataSet/movies.csv' using CSVLoader() as (rid:int,title:chararray,genres:chararray);
 fltrd = FILTER temp BY (genres matches '.*Adventure.*');
 prjctd = FOREACH fltrd GENERATE $0,$1;
 
