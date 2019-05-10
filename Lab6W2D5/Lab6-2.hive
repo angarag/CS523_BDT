@@ -22,12 +22,14 @@ SELECT FP,AVG(Salary) as avg_salary
 FROM emp_salaries
 GROUP BY FP;
 
---
-SELECT *
-FROM emp_salaries table0 JOIN (SELECT Dept,COUNT(*) as num_emps
-FROM emp_salaries table1
-GROUP BY Dept) table1 ON (table1.Dept = table0.Dept)
-LIMIT 50;
+--THE MOST COMMON FIRSTNAMES--
+SELECT fname, count(*) as count
+FROM(
+SELECT split(name,',')[0] as fname
+FROM emp_salaries) table0
+GROUP BY fname
+ORDER BY fname;
+
 
 
 
