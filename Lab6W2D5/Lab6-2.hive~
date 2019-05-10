@@ -28,8 +28,8 @@ FROM(
 SELECT split(name,',')[0] as fname
 FROM emp_salaries) table0
 GROUP BY fname
-ORDER BY count
-LIMIT 100;
+ORDER BY count;
+
 
 
 
