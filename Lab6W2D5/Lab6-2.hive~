@@ -22,8 +22,8 @@ SELECT FP,AVG(Salary) as avg_salary
 FROM emp_salaries
 GROUP BY FP;
 
---THE MOST COMMON 100 FIRSTNAMES--
-SELECT fname, count(*) as count
+--THE MOST COMMON 100 FIRST NAMES--
+SELECT fname, count(*) as count, count(*)/33692 as ratio,
 FROM(
 SELECT split(name,',')[0] as fname
 FROM emp_salaries) table0
