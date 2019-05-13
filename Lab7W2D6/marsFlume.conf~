@@ -2,9 +2,9 @@ agent1.sources = source1
 agent1.channels = channel1a channel1b
 agent1.sinks = sink1a sink1b
 
-agent1.sources.source1.type = spooldir
-agent1.sources.source1.channels = channel1a channel1b
-agent1.sources.source1.spoolDir = /tmp/spooldir
+agent1.sources.mySource.type = spooldir
+agent1.sources.mySource.channels = channel1a channel1b
+agent1.sources.mySource.spoolDir = /tmp/spooldir
 
 agent1.channels.channel1a.type = file
 agent1.channels.channel1b.type = memory
