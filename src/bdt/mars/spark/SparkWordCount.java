@@ -44,7 +44,10 @@ public class SparkWordCount {
 				.reduceByKey((x, y) -> x + y)
 				.mapToPair(w -> new Tuple2<Integer, String>(w._2, w._1))
 				.sortByKey(false)
-				.mapToPair(w -> new Tuple2<String, Integer>(w._2, w._1));
+				.mapToPair(w -> new Tuple2<String, Integer>(w._2, w._1))
+				.cache();
+		System.out.println("Printing the letters with their occurences in descending order");
+		letters.collect().forEach(System.out::println);
 		// Save the letter count back out to a text file, causing evaluation
 		letters.saveAsTextFile(output);
 		
