@@ -1,0 +1,1 @@
+spark-submit --class cs523.SparkWC.SparkWordCountjdk8 --master yarn Spark2WCjdk7-0.0.1-SNAPSHOT.jar ~input ~output_spark
