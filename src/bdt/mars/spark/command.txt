@@ -1,1 +1,4 @@
-spark-submit --class cs523.SparkWC.SparkWordCountjdk8 --master yarn Spark2WCjdk7-0.0.1-SNAPSHOT.jar ~input ~output_spark
+#Hadoop
+copyFromLocal /home/cloudera/workspace/CS523_BDT/src/bdt/mars/spark/words.txt Desktop/input
+#Spark
+spark-submit --class bdt.mars.spark.SparkLetterCount --master yarn Spark_LC-SNAPSHOT.jar Desktop/input output_spark 20
