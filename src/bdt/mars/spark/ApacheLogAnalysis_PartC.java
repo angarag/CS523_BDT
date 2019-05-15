@@ -13,14 +13,15 @@ import com.google.common.primitives.Chars;
 
 import scala.Tuple2;
 
-public class ApacheLogAnalysis {
+public class ApacheLogAnalysis_PartC {
 
 	public static void main(String[] args) throws Exception {
 		String input = args[0];
 		String output = args[1];
+		int limit = Integer.parseInt(args[2]);
 		// Create a Java Spark Context
 		JavaSparkContext sc = new JavaSparkContext(new SparkConf().setAppName(
-				"wordCount").setMaster("local"));
+				"apacheLogAnalysis").setMaster("local"));
 
 		// Load our input data
 		JavaRDD<String> lines = sc.textFile(input);
@@ -29,11 +30,10 @@ public class ApacheLogAnalysis {
 		JavaPairRDD<String, Integer> IPs = lines
 				.map(line -> line.split(" ")[0])
 				.mapToPair(w -> new Tuple2<String, Integer>(w, 1))
-				.reduceByKey((x, y) -> x + y)
-				.filter(ip -> ip._2>=20).cache();
+				.reduceByKey((x, y) -> x + y).filter(ip -> ip._2 >= 20).cache();
 		IPs.collect().forEach(System.out::println);
 		IPs.saveAsTextFile(output);
-		
+
 		sc.close();
 	}
 }
