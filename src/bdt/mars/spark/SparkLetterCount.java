@@ -2,7 +2,6 @@ package bdt.mars.spark;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -26,17 +25,14 @@ public class SparkLetterCount {
 		// Load our input data
 		JavaRDD<String> lines = sc.textFile(input);
 
-		// Calculate word count
-		List<String> words = lines
+		// Calculate letter count
+		JavaPairRDD<String, Integer> letters = lines
 				.flatMap(line -> Arrays.asList(line.split(" ")))
 				.mapToPair(w -> new Tuple2<String, Integer>(w, 1))
 				.reduceByKey((x, y) -> x + y)
 				.mapToPair(w -> new Tuple2<Integer, String>(w._2, w._1))
-				.sortByKey(false).map(w -> w._2).take(limit);
-		System.out.printf("Printing out the top %s words\n", limit);
-		words.forEach(x -> System.out.println(x));// top words
-		JavaPairRDD<String, Integer> letters = sc.parallelize(words)
-				.flatMap(word -> Chars.asList(word.toCharArray()))
+				.filter(w -> w._1 >= limit)
+				.flatMap(word -> Chars.asList(word._2.toCharArray()))
 				.mapToPair(c -> new Tuple2<String, Integer>(c.toString(), 1))
 				.reduceByKey((x, y) -> x + y)
 				.mapToPair(w -> new Tuple2<Integer, String>(w._2, w._1))
