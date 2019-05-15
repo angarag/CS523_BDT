@@ -13,7 +13,7 @@ import com.google.common.primitives.Chars;
 
 import scala.Tuple2;
 
-public class SparkWordCount {
+public class SparkLetterCount {
 
 	public static void main(String[] args) throws Exception {
 		String input = args[0];
@@ -32,13 +32,10 @@ public class SparkWordCount {
 				.mapToPair(w -> new Tuple2<String, Integer>(w, 1))
 				.reduceByKey((x, y) -> x + y)
 				.mapToPair(w -> new Tuple2<Integer, String>(w._2, w._1))
-				.sortByKey(false)
-				.map(w -> w._2)
-				.take(limit);
-		System.out.printf("Printing out the top %s words\n",limit);
+				.sortByKey(false).map(w -> w._2).take(limit);
+		System.out.printf("Printing out the top %s words\n", limit);
 		words.forEach(x -> System.out.println(x));// top words
-		JavaPairRDD<String, Integer> letters = 
-				sc.parallelize(words)
+		JavaPairRDD<String, Integer> letters = sc.parallelize(words)
 				.flatMap(word -> Chars.asList(word.toCharArray()))
 				.mapToPair(c -> new Tuple2<String, Integer>(c.toString(), 1))
 				.reduceByKey((x, y) -> x + y)
@@ -46,11 +43,12 @@ public class SparkWordCount {
 				.sortByKey(false)
 				.mapToPair(w -> new Tuple2<String, Integer>(w._2, w._1))
 				.cache();
-		System.out.println("Printing the letters with their occurences in descending order");
+		System.out
+				.println("Printing the letters with their occurences in descending order");
 		letters.collect().forEach(System.out::println);
 		// Save the letter count back out to a text file, causing evaluation
 		letters.saveAsTextFile(output);
-		
+
 		sc.close();
 	}
 }

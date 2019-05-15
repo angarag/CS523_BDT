@@ -17,8 +17,7 @@ public class ApacheLogAnalysis_PartC {
 
 	public static void main(String[] args) throws Exception {
 		String input = args[0];
-		String output = args[1];
-		int limit = Integer.parseInt(args[2]);
+		int limit = Integer.parseInt(args[1]);
 		// Create a Java Spark Context
 		JavaSparkContext sc = new JavaSparkContext(new SparkConf().setAppName(
 				"apacheLogAnalysis").setMaster("local"));
@@ -27,13 +26,19 @@ public class ApacheLogAnalysis_PartC {
 		JavaRDD<String> lines = sc.textFile(input);
 
 		// Calculate word count
-		JavaPairRDD<String, Integer> IPs = lines
-				.map(line -> line.split(" ")[0])
-				.mapToPair(w -> new Tuple2<String, Integer>(w, 1))
-				.reduceByKey((x, y) -> x + y).filter(ip -> ip._2 >= 20).cache();
-		IPs.collect().forEach(System.out::println);
-		IPs.saveAsTextFile(output);
-
+		List<String> IPs = lines.map(line -> {
+			String[] arr = line.split(" ");
+			System.out.println(arr[arr.length-2]);
+			if (arr.length > 1)
+				return arr[arr.length - 2];
+			else
+				return "";
+		}).take(limit);
+		long count = sc.parallelize(IPs)
+				.filter(status_code -> status_code.equals("401"))
+				.count();
+		System.out.printf("There are %s 401 errors in the range %s \n", count,
+				limit);
 		sc.close();
 	}
 }
