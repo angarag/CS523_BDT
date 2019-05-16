@@ -1,7 +1,6 @@
 package bdt.mars.spark;
 
 import java.util.Arrays;
-import java.util.List;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaPairRDD;
