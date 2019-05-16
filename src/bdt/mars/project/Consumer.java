@@ -14,11 +14,14 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import scala.Tuple2;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 
 public class Consumer {
 
-	public static void main(String args[]) {
-
+	public static void main(String args[]) throws InterruptedException {
+		Logger.getLogger("org").setLevel(Level.OFF);
+		Logger.getLogger("akka").setLevel(Level.OFF);
 		Map<String, Object> kafkaParams = new HashMap<>();
 		kafkaParams.put("bootstrap.servers", "localhost:9092,anotherhost:9092");
 		kafkaParams.put("key.deserializer", StringDeserializer.class);
@@ -38,6 +41,10 @@ public class Consumer {
 						ConsumerStrategies.<String, String> Subscribe(topics,
 								kafkaParams));
 
-		stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
+		stream.mapToPair(record -> new Tuple2<>(record.value(), 1))
+				.reduceByKeyAndWindow((i1, i2) -> i1 + i2, new Duration(30000),
+						new Duration(2000)).print();
+		ssc.start(); // Start the computation
+		ssc.awaitTermination(); // Wait for the computation to terminate
 	}
 }
