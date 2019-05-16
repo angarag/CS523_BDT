@@ -44,14 +44,16 @@ public class Main extends Configured implements Tool {
 		FileSystem fs = FileSystem.get(conf);
 		fs.delete(new Path(args[1]), true);
 		int res = ToolRunner.run(conf, new Main(), args);
-		fs.rename(new Path(args[1]+"/StationTempRecord-r-00000"), new Path(args[1]+"/StationTempRecord"));
+		fs.rename(new Path(args[1] + "/StationTempRecord-r-00000"), new Path(
+				args[1] + "/StationTempRecord"));
 		System.exit(res);
 	}
 
 	public int run(String[] args) throws Exception {
 
 		Job job = new Job(getConf(), "Custom sort for temperature");
-		job.getConfiguration().set("mapreduce.output.basename", "StationTempRecord");
+		job.getConfiguration().set("mapreduce.output.basename",
+				"StationTempRecord");
 
 		job.setJarByClass(Main.class);
 
@@ -63,11 +65,13 @@ public class Main extends Configured implements Tool {
 		job.setInputFormatClass(TextInputFormat.class);
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
-		if(job.waitForCompletion(true)==true) {
-//			FileSystem fs = FileSystem.get(new Configuration());
-//			fs.rename(new Path(args[1]+"/part-r-00000"), new Path(args[1]+"/StationTempRecord"));
-//			//fs.delete(new Path(args[1]), true);
+		if (job.waitForCompletion(true) == true) {
+			// FileSystem fs = FileSystem.get(new Configuration());
+			// fs.rename(new Path(args[1]+"/part-r-00000"), new
+			// Path(args[1]+"/StationTempRecord"));
+			// //fs.delete(new Path(args[1]), true);
 			return 0;
-		}else return 1;
+		} else
+			return 1;
 	}
 }

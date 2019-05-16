@@ -28,15 +28,14 @@ public class ApacheLogAnalysis_PartC {
 		// Calculate word count
 		List<String> IPs = lines.map(line -> {
 			String[] arr = line.split(" ");
-			System.out.println(arr[arr.length-2]);
+			System.out.println(arr[arr.length - 2]);
 			if (arr.length > 1)
 				return arr[arr.length - 2];
 			else
 				return "";
 		}).take(limit);
 		long count = sc.parallelize(IPs)
-				.filter(status_code -> status_code.equals("401"))
-				.count();
+				.filter(status_code -> status_code.equals("401")).count();
 		System.out.printf("There are %s 401 errors in the range %s \n", count,
 				limit);
 		sc.close();

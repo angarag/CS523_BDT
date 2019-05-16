@@ -43,7 +43,7 @@ public class AvroMaxTemperature extends Configured implements Tool {
 				record.put("stationId", utils.getStationId());
 				record.put("temperature", utils.getAirTemperature());
 				record.put("year", utils.getYearInt());
-				System.out.println("mapper emitted"+record.toString());
+				System.out.println("mapper emitted" + record.toString());
 				context.write(new AvroKey<GenericRecord>(record),
 						NullWritable.get());
 
@@ -54,19 +54,20 @@ public class AvroMaxTemperature extends Configured implements Tool {
 	public static class AvroReducer
 			extends
 			Reducer<AvroKey<GenericRecord>, NullWritable, AvroKey<GenericRecord>, NullWritable> {
-		private String prevYear="";
-		private String currentYear="";
+		private String prevYear = "";
+		private String currentYear = "";
+
 		@Override
 		protected void reduce(AvroKey<GenericRecord> key,
 				Iterable<NullWritable> values, Context context)
 				throws IOException, InterruptedException {
 			System.out.println(key.toString());
 			// Emit reducer output here
-			currentYear=key.datum().get("year").toString();
-			if(currentYear.compareTo(prevYear)!=0)
+			currentYear = key.datum().get("year").toString();
+			if (currentYear.compareTo(prevYear) != 0)
 				context.write(key, NullWritable.get());// added by mars
-			System.out.println(prevYear+" vs "+currentYear);
-			prevYear=currentYear;
+			System.out.println(prevYear + " vs " + currentYear);
+			prevYear = currentYear;
 
 		}
 	}

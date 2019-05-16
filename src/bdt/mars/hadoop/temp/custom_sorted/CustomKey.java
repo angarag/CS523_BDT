@@ -38,25 +38,25 @@ public class CustomKey implements Writable, WritableComparable<CustomKey> {
 		this.temperature = temp;
 	}
 
-	//@Override
+	// @Override
 	public void readFields(DataInput arg0) throws IOException {
 		stationID.readFields(arg0);
-		temperature=arg0.readDouble();
+		temperature = arg0.readDouble();
 	}
 
-	//@Override
+	// @Override
 	public void write(DataOutput arg0) throws IOException {
 		stationID.write(arg0);
 		arg0.writeDouble(temperature);
 	}
 
-	//@Override
+	// @Override
 	public int compareTo(CustomKey o) {
 		int k = o.getStationID().toString()
 				.compareTo(this.stationID.toString());
 		if (k != 0)
-			return -k;//asc
-		k = o.getTemperature().compareTo(this.temperature);//desc
+			return -k;// asc
+		k = o.getTemperature().compareTo(this.temperature);// desc
 		return k;
 	}
 
