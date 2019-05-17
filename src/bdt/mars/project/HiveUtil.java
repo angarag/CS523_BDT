@@ -5,12 +5,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 public class HiveUtil implements Serializable {
 	private int key;
 	private String value;
@@ -32,18 +35,19 @@ public class HiveUtil implements Serializable {
 	}
 
 	public static void main(String[] args) {
-
+		Logger.getLogger("org").setLevel(Level.OFF);
+		Logger.getLogger("akka").setLevel(Level.OFF);
 		// warehouseLocation points to the default location for managed
 		// databases and tables
 		String warehouseLocation = new File("spark-warehouse")
 				.getAbsolutePath();
 		SparkSession spark = SparkSession.builder()
 				.appName("Java Spark Hive Example")
-				.config("spark.sql.warehouse.dir", warehouseLocation)
+				.config("spark.master", "local")
 				.enableHiveSupport().getOrCreate();
 
 		spark.sql("CREATE TABLE IF NOT EXISTS src (key INT, value STRING) USING hive");
-		spark.sql("LOAD DATA LOCAL INPATH 'examples/src/main/resources/kv1.txt' INTO TABLE src");
+		spark.sql("LOAD DATA LOCAL INPATH './input/hive_data.txt' INTO TABLE src");
 
 		// Queries are expressed in HiveQL
 		spark.sql("SELECT * FROM src").show();
