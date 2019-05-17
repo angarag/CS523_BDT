@@ -1,5 +1,8 @@
 package bdt.mars.project.v1;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.apache.spark.SparkConf;
@@ -9,15 +12,19 @@ import org.apache.spark.api.java.function.*;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.*;
 import org.apache.spark.streaming.kafka010.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import scala.Tuple2;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 
 public class Consumer {
+	static String fileName = "input/election_votes.txt";
+	static File file = new File(fileName);
 
 	public static void main(String args[]) throws InterruptedException {
 		Logger.getLogger("org").setLevel(Level.OFF);
@@ -49,18 +56,19 @@ public class Consumer {
 			return new Tuple2<>(record.key(), 1);
 		})
 				.reduceByKeyAndWindow((i1, i2) -> i1 + i2, new Duration(30000),
-						new Duration(500))
-						.print();
+						new Duration(500)).print();
 		ssc.start(); // Start the computation
 		ssc.awaitTermination(); // Wait for the computation to terminate
 	}
 
-	public static void helper(String[] vote_record) {
+	public static void helper(String[] vote_record) throws IOException {
 		String candidate = vote_record[0];
 		String user = vote_record[1];
-		String timestampt = vote_record[2];
+		String timestamp = vote_record[2];
 		// save into ElasticSearch
 		// append into input/election_votes.txt
-		//System.out.println(Arrays.toString(vote_record));
+		// System.out.println(Arrays.toString(vote_record));
+		String row = candidate + "" + user + "" + timestamp + "\n";
+		FileUtils.writeStringToFile(file, row, StandardCharsets.UTF_8, true);
 	}
 }
