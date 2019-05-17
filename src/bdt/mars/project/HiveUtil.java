@@ -46,11 +46,11 @@ public class HiveUtil implements Serializable {
 				.config("spark.master", "local")
 				.enableHiveSupport().getOrCreate();
 
-		spark.sql("CREATE TABLE IF NOT EXISTS src (key INT, value STRING) USING hive");
-		spark.sql("LOAD DATA LOCAL INPATH './input/hive_data.csv' OVERWRITE INTO TABLE src");
+		spark.sql("CREATE TABLE IF NOT EXISTS vote (candidate STRING, user STRING, time TIMESTAMP) USING hive");
+		spark.sql("LOAD DATA LOCAL INPATH './input/hive_data.txt' OVERWRITE INTO TABLE vote");
 
 		// Queries are expressed in HiveQL
-		spark.sql("SELECT * FROM src").show();
+		spark.sql("SELECT candidate,COUNT(*) FROM vote GROUP BY candidate").show();
 		// +---+-------+
 		// |key| value|
 		// +---+-------+
@@ -60,7 +60,7 @@ public class HiveUtil implements Serializable {
 		// ...
 
 		// Aggregation queries are also supported.
-		spark.sql("SELECT COUNT(*) FROM src").show();
+		spark.sql("SELECT * FROM vote").show();
 		// +--------+
 		// |count(1)|
 		// +--------+
@@ -69,15 +69,15 @@ public class HiveUtil implements Serializable {
 
 		// The results of SQL queries are themselves DataFrames and support all
 		// normal functions.
-		Dataset<Row> sqlDF = spark
-				.sql("SELECT key, value FROM src WHERE key < 1000 ORDER BY key");
-
-		// The items in DataFrames are of type Row, which lets you to access
-		// each column by ordinal.
-		Dataset<String> stringsDS = sqlDF.map(
-				(MapFunction<Row, String>) row -> "Key: " + row.get(0)
-						+ ", Value: " + row.get(1), Encoders.STRING());
-		stringsDS.show();
+//		Dataset<Row> sqlDF = spark
+//				.sql("SELECT key, value FROM src WHERE key < 1000 ORDER BY key");
+//
+//		// The items in DataFrames are of type Row, which lets you to access
+//		// each column by ordinal.
+//		Dataset<String> stringsDS = sqlDF.map(
+//				(MapFunction<Row, String>) row -> "Key: " + row.get(0)
+//						+ ", Value: " + row.get(1), Encoders.STRING());
+//		stringsDS.show();
 		// +--------------------+
 		// | value|
 		// +--------------------+
@@ -99,7 +99,7 @@ public class HiveUtil implements Serializable {
 //		recordsDF.createOrReplaceTempView("records");
 
 		// Queries can then join DataFrames data with data stored in Hive.
-		spark.sql("SELECT * FROM records r JOIN src s ON r.key = s.key").show();
+		//spark.sql("SELECT * FROM records r JOIN src s ON r.key = s.key").show();
 		// +---+------+---+------+
 		// |key| value|key| value|
 		// +---+------+---+------+
