@@ -35,7 +35,7 @@ public class Consumer {
 				"local[*]");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaStreamingContext ssc = new JavaStreamingContext(sc, new Duration(
-				2000));
+				500));
 		JavaInputDStream<ConsumerRecord<String, String>> stream = KafkaUtils
 				.createDirectStream(ssc, LocationStrategies.PreferConsistent(),
 						ConsumerStrategies.<String, String> Subscribe(topics,
@@ -46,10 +46,11 @@ public class Consumer {
 			vote[1] = record.value().split(",")[0];
 			vote[2] = record.value().split(",")[1];
 			helper(vote);
-			return new Tuple2<>(record.value(), 1);
+			return new Tuple2<>(record.key(), 1);
 		})
 				.reduceByKeyAndWindow((i1, i2) -> i1 + i2, new Duration(30000),
-						new Duration(2000)).print();
+						new Duration(500))
+						.print();
 		ssc.start(); // Start the computation
 		ssc.awaitTermination(); // Wait for the computation to terminate
 	}
@@ -60,5 +61,6 @@ public class Consumer {
 		String timestampt = vote_record[2];
 		// save into ElasticSearch
 		// append into input/election_votes.txt
+		//System.out.println(Arrays.toString(vote_record));
 	}
 }
