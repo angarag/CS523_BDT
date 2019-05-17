@@ -29,6 +29,8 @@ public class Producer {
 					candidates[(int) random_candidate], new String(
 							Names.giveMeName(random_user) + ","
 									+ timestamp.getTime()));
+			System.out.println(candidates[(int) random_candidate]+":"+Names.giveMeName(random_user) + ","
+					+ timestamp.getTime());
 			producer.send(data);
 			Thread.sleep(500);
 		}

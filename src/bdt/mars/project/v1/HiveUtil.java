@@ -47,7 +47,7 @@ public class HiveUtil implements Serializable {
 				.config("spark.master", "local").enableHiveSupport()
 				.getOrCreate();
 
-		spark.sql("CREATE TABLE IF NOT EXISTS vote (candidate STRING, user STRING, time TIMESTAMP) USING hive");
+		spark.sql("CREATE TABLE IF NOT EXISTS vote (candidate STRING, user STRING, date TIMESTAMP) USING hive");
 		spark.sql("LOAD DATA LOCAL INPATH 'input/election_votes.txt' OVERWRITE INTO TABLE vote");
 		// spark.sql("LOAD DATA INPATH 'user/cloudera/input/election_votes.txt' OVERWRITE INTO TABLE vote");
 		// Queries are expressed in HiveQL
@@ -63,8 +63,8 @@ public class HiveUtil implements Serializable {
 
 		// Aggregation queries are also supported.
 		spark.sql(
-				"SELECT * FROM vote"
-						+ " where from_unixtime(unix_timestamp(time, 'dd-MM-yyyy'),'yyyy-MM-dd') >= from_unixtime(unix_timestamp('2019-05-05', 'yyyy-MM-dd'),'yyyy-MM-dd') and from_unixtime(unix_timestamp(time, 'dd-MM-yyyy'),'yyyy-MM-dd') <= from_unixtime(unix_timestamp('2020-05-05', 'yyyy-MM-dd'),'yyyy-MM-dd')")
+				"SELECT candidate, user, to_date(date) FROM vote")
+//						+ " where from_unixtime(unix_timestamp(date, 'dd-MM-yyyy'),'yyyy-MM-dd') >= from_unixtime(unix_timestamp('2019-05-05', 'yyyy-MM-dd'),'yyyy-MM-dd') and from_unixtime(unix_timestamp(date, 'dd-MM-yyyy'),'yyyy-MM-dd') <= from_unixtime(unix_timestamp('2020-05-05', 'yyyy-MM-dd'),'yyyy-MM-dd')")
 				.show();
 		// +--------+
 		// |count(1)|
