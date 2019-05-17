@@ -16,7 +16,7 @@ object Consumer {
   def main(args: Array[String]) {
 
     val kafkaParams = Map[String, Object](
-      "bootstrap.servers" -> "kafka-66012d1-mum-6eb6.aivencloud.com:23237",//localhost:9092,
+      "bootstrap.servers" -> "localhost:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "use_a_separate_group_id_for_each_stream",
