@@ -47,7 +47,7 @@ public class HiveUtil implements Serializable {
 				.enableHiveSupport().getOrCreate();
 
 		spark.sql("CREATE TABLE IF NOT EXISTS vote (candidate STRING, user STRING, time TIMESTAMP) USING hive");
-		spark.sql("LOAD DATA LOCAL INPATH './input/hive_data.txt' OVERWRITE INTO TABLE vote");
+		spark.sql("LOAD DATA LOCAL INPATH './input/election_votes.txt' OVERWRITE INTO TABLE vote");
 
 		// Queries are expressed in HiveQL
 		spark.sql("SELECT candidate,COUNT(*) FROM vote GROUP BY candidate").show();

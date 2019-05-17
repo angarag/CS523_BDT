@@ -30,7 +30,7 @@ public class Consumer {
 		kafkaParams.put("auto.offset.reset", "latest");
 		kafkaParams.put("enable.auto.commit", false);
 
-		Collection<String> topics = Arrays.asList("test", "topicB");
+		Collection<String> topics = Arrays.asList("test", "election");
 		SparkConf conf = new SparkConf().setAppName("kafka-sandbox").setMaster(
 				"local[*]");
 		JavaSparkContext sc = new JavaSparkContext(conf);
@@ -40,11 +40,23 @@ public class Consumer {
 				.createDirectStream(ssc, LocationStrategies.PreferConsistent(),
 						ConsumerStrategies.<String, String> Subscribe(topics,
 								kafkaParams));
-
-		stream.mapToPair(record -> new Tuple2<>(record.value(), 1))
+		String[] vote=new String[3];
+		stream.mapToPair(record -> {
+			vote[0]=record.key();
+			vote[1]=record.value().split(",")[0];
+			vote[2]=record.value().split(",")[1];
+			helper(vote);
+			return new Tuple2<>(record.value(), 1);})
 				.reduceByKeyAndWindow((i1, i2) -> i1 + i2, new Duration(30000),
 						new Duration(2000)).print();
 		ssc.start(); // Start the computation
 		ssc.awaitTermination(); // Wait for the computation to terminate
+	}
+	public static void helper(String[] vote_record) {
+		String candidate = vote_record[0];
+		String user = vote_record[1];
+		String timestampt = vote_record[2];
+		//save into ElasticSearch
+		//append into input/election_votes.txt
 	}
 }

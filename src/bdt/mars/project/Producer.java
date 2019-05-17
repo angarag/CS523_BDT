@@ -4,6 +4,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.sql.Timestamp;
 import java.util.Properties;
 
 public class Producer {
@@ -16,15 +17,15 @@ public class Producer {
 				"org.apache.kafka.common.serialization.StringSerializer");
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(
 				props);
-		for (int i = 0; i < 10; i++) {
+		String[] candidates = {"Arya","Jon","Sansa","Sersei","Daenerys"};
+		for (int i = 0; i < 100; i++) {
 			ProducerRecord<String, String> data;
-			if (i % 2 == 0) {
-				data = new ProducerRecord<String, String>("test", 0,
-						Integer.toString(i), String.format("%d is even", i));
-			} else {
-				data = new ProducerRecord<String, String>("odd", 0,
-						Integer.toString(i), String.format("%d is odd", i));
-			}
+			double random = Math.random()*candidates.length;
+			 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			data = new ProducerRecord<String, String>("election", 0,
+					candidates[(int)random], new String(candidates[(int)random]+","+
+			timestamp.getTime()
+					));
 			producer.send(data);
 			Thread.sleep(1L);
 		}
