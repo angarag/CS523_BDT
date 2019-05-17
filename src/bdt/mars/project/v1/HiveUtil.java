@@ -1,4 +1,4 @@
-package bdt.mars.project;
+package bdt.mars.project.v1;
 
 import java.io.File;
 import java.io.Serializable;
@@ -14,6 +14,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
+
 public class HiveUtil implements Serializable {
 	private int key;
 	private String value;
@@ -43,14 +44,15 @@ public class HiveUtil implements Serializable {
 				.getAbsolutePath();
 		SparkSession spark = SparkSession.builder()
 				.appName("Java Spark Hive Example")
-				.config("spark.master", "local")
-				.enableHiveSupport().getOrCreate();
+				.config("spark.master", "local").enableHiveSupport()
+				.getOrCreate();
 
 		spark.sql("CREATE TABLE IF NOT EXISTS vote (candidate STRING, user STRING, time TIMESTAMP) USING hive");
 		spark.sql("LOAD DATA LOCAL INPATH './input/election_votes.txt' OVERWRITE INTO TABLE vote");
 
 		// Queries are expressed in HiveQL
-		spark.sql("SELECT candidate,COUNT(*) FROM vote GROUP BY candidate").show();
+		spark.sql("SELECT candidate,COUNT(*) FROM vote GROUP BY candidate")
+				.show();
 		// +---+-------+
 		// |key| value|
 		// +---+-------+
@@ -69,15 +71,15 @@ public class HiveUtil implements Serializable {
 
 		// The results of SQL queries are themselves DataFrames and support all
 		// normal functions.
-//		Dataset<Row> sqlDF = spark
-//				.sql("SELECT key, value FROM src WHERE key < 1000 ORDER BY key");
-//
-//		// The items in DataFrames are of type Row, which lets you to access
-//		// each column by ordinal.
-//		Dataset<String> stringsDS = sqlDF.map(
-//				(MapFunction<Row, String>) row -> "Key: " + row.get(0)
-//						+ ", Value: " + row.get(1), Encoders.STRING());
-//		stringsDS.show();
+		// Dataset<Row> sqlDF = spark
+		// .sql("SELECT key, value FROM src WHERE key < 1000 ORDER BY key");
+		//
+		// // The items in DataFrames are of type Row, which lets you to access
+		// // each column by ordinal.
+		// Dataset<String> stringsDS = sqlDF.map(
+		// (MapFunction<Row, String>) row -> "Key: " + row.get(0)
+		// + ", Value: " + row.get(1), Encoders.STRING());
+		// stringsDS.show();
 		// +--------------------+
 		// | value|
 		// +--------------------+
@@ -88,18 +90,19 @@ public class HiveUtil implements Serializable {
 
 		// You can also use DataFrames to create temporary views within a
 		// SparkSession.
-//		List<Record> records = new ArrayList<>();
-//		for (int key = 1; key < 100; key++) {
-//			Record record = new Record();
-//			record.setKey(key);
-//			record.setValue("val_" + key);
-//			records.add(record);
-//		}
-//		Dataset<Row> recordsDF = spark.createDataFrame(records, Record.class);
-//		recordsDF.createOrReplaceTempView("records");
+		// List<Record> records = new ArrayList<>();
+		// for (int key = 1; key < 100; key++) {
+		// Record record = new Record();
+		// record.setKey(key);
+		// record.setValue("val_" + key);
+		// records.add(record);
+		// }
+		// Dataset<Row> recordsDF = spark.createDataFrame(records,
+		// Record.class);
+		// recordsDF.createOrReplaceTempView("records");
 
 		// Queries can then join DataFrames data with data stored in Hive.
-		//spark.sql("SELECT * FROM records r JOIN src s ON r.key = s.key").show();
+		// spark.sql("SELECT * FROM records r JOIN src s ON r.key = s.key").show();
 		// +---+------+---+------+
 		// |key| value|key| value|
 		// +---+------+---+------+

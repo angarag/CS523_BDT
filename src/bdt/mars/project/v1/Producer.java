@@ -1,4 +1,4 @@
-package bdt.mars.project;
+package bdt.mars.project.v1;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -17,15 +17,18 @@ public class Producer {
 				"org.apache.kafka.common.serialization.StringSerializer");
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(
 				props);
-		String[] candidates = {"Arya","Jon","Sansa","Sersei","Daenerys"};
+		String[] candidates = { "Arya", "Jon", "Sansa", "Sersei", "Daenerys" };
+		int csize = candidates.length;
+		int usize = Names.giveMeSize();
 		for (int i = 0; i < 100; i++) {
 			ProducerRecord<String, String> data;
-			double random = Math.random()*candidates.length;
-			 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			double random_candidate = Math.random() * csize;
+			double random_user = Math.random() * usize;
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			data = new ProducerRecord<String, String>("election", 0,
-					candidates[(int)random], new String(candidates[(int)random]+","+
-			timestamp.getTime()
-					));
+					candidates[(int) random_candidate], new String(
+							Names.giveMeName(random_user) + ","
+									+ timestamp.getTime()));
 			producer.send(data);
 			Thread.sleep(1L);
 		}
