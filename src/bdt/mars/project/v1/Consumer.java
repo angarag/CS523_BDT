@@ -62,12 +62,13 @@ public class Consumer {
 	}
 
 	public static void helper(String[] vote_record) throws IOException {
+		// System.out.println(Arrays.toString(vote_record));
 		String candidate = vote_record[0];
 		String user = vote_record[1];
 		String timestamp = vote_record[2];
 		// save into ElasticSearch
+		
 		// append into input/election_votes.txt
-		// System.out.println(Arrays.toString(vote_record));
 		String row = candidate + "" + user + "" + timestamp + "\n";
 		FileUtils.writeStringToFile(file, row, StandardCharsets.UTF_8, true);
 	}
