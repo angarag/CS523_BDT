@@ -47,7 +47,7 @@ public class HiveUtil implements Serializable {
 				.enableHiveSupport().getOrCreate();
 
 		spark.sql("CREATE TABLE IF NOT EXISTS src (key INT, value STRING) USING hive");
-		spark.sql("LOAD DATA LOCAL INPATH './input/hive_data.csv' INTO TABLE src");
+		spark.sql("LOAD DATA LOCAL INPATH './input/hive_data.csv' OVERWRITE INTO TABLE src");
 
 		// Queries are expressed in HiveQL
 		spark.sql("SELECT * FROM src").show();
@@ -70,7 +70,7 @@ public class HiveUtil implements Serializable {
 		// The results of SQL queries are themselves DataFrames and support all
 		// normal functions.
 		Dataset<Row> sqlDF = spark
-				.sql("SELECT key, value FROM src WHERE key < 10 ORDER BY key");
+				.sql("SELECT key, value FROM src WHERE key < 1000 ORDER BY key");
 
 		// The items in DataFrames are of type Row, which lets you to access
 		// each column by ordinal.
