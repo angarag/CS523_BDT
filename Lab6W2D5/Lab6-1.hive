@@ -1,0 +1,27 @@
+CREATE TABLE records (year STRING, temperature INT, quality INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+LOAD DATA LOCAL INPATH '/home/cloudera/workspace/SampleWeatherForHive.txt'
+OVERWRITE INTO TABLE records;
+
+SELECT year, MAX(temperature) FROM records WHERE temperature !=
+9999 AND quality IN (0, 1, 4, 5) GROUP BY year;
+
+DROP TABLE records;
+
+
+CREATE EXTERNAL TABLE records (year STRING, temperature INT, quality INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+LOCATION '/user/cloudera/lab6'
+tblproperties ("skip.header.line.count"="1");
+
+CREATE EXTERNAL TABLE emp_salaries
+(Name STRING, Title STRING, FP CHAR(1), Hourly DOUBLE, Hours DOUBLE, Salary DOUBLE, 
+HourRate DOUBLE
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/user/cloudera/lab6';
+
+
+
+

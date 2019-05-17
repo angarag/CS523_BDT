@@ -1,0 +1,8 @@
+.*
+!/.gitignore
+/bin/
+/input/
+/output/
+/spark-warehouse/
+/metastore_db/
+/target/

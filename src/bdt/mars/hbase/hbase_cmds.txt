@@ -1,0 +1,3 @@
+scan 'user'
+get 'user', '2', {COLUMN=> ['personal_details','prof_details'], VERSIONS=>2}
+count 'user'
