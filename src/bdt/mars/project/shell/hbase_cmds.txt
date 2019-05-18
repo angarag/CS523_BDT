@@ -1,0 +1,3 @@
+scan 'election'
+get 'election', '2', {COLUMN=> ['vote_details'], VERSIONS=>2}
+count 'election'

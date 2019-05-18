@@ -45,6 +45,9 @@ public class HBaseUtil {
 		}
 	}
 
+	public static void main(String[] args) throws IOException{
+		init();
+	}
 	public static void saveRecord(String[] current) throws IOException {
 		System.out.print("Inserting data to the table.... ");
 		Put puts = new Put(helper(current[3]));
