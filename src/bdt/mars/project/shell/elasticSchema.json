@@ -1,0 +1,25 @@
+//sudo -i service elasticsearch start
+PUT /election1
+{
+  "mappings": {
+    "properties": {
+      "voteFor": {
+        "type": "text"
+      },
+      "timestamp": {
+        "type": "date",
+		"format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+      },
+      "count": {
+        "type": "integer"
+      }
+    }
+  }
+}
+
+POST /election/_doc/$USER
+{
+"voteFor":"Jon",
+"timestamp":1420070400001,
+"count":1
+}
