@@ -20,22 +20,24 @@ import org.json.simple.JSONObject;
 public class HTTPPostSender {
 	private static String es_url;
 	private static String es_password;
-	public static void init() throws FileNotFoundException, IOException{
-		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+
+	public static void init() throws FileNotFoundException, IOException {
+		String rootPath = Thread.currentThread().getContextClassLoader()
+				.getResource("").getPath();
 		String appConfigPath = rootPath + "/../../conf/app.properties";
-		 
+
 		Properties appProps = new Properties();
 		appProps.load(new FileInputStream(appConfigPath));
 		es_url = appProps.getProperty("url");
-		es_password =appProps.getProperty("password");
+		es_password = appProps.getProperty("password");
 	}
+
 	public static void saveToES(String args[]) {
 		String who = args[0];
 		String voteFor = args[1];
 		String count = args[2];
 		String timestamp = args[3];
-		String restUrl = es_url
-				+ who+"_" + voteFor;
+		String restUrl = es_url + who + "_" + voteFor;
 		String username = "elastic";
 		JSONObject user = new JSONObject();
 		user.put("voteFor", voteFor);
@@ -88,13 +90,14 @@ public class HTTPPostSender {
 		httpPost.setEntity(new StringEntity(jsonData));
 		HttpClient client = HttpClientBuilder.create().build();
 		response = client.execute(httpPost);
-		//System.out.println("Post parameters : " + jsonData);
-		//System.out.println("Response Code : "				+ response.getStatusLine().getStatusCode());
+		// System.out.println("Post parameters : " + jsonData);
+		// System.out.println("Response Code : " +
+		// response.getStatusLine().getStatusCode());
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				response.getEntity().getContent()));
 		while ((line = reader.readLine()) != null) {
 			result.append(line);
 		}
-		//System.out.println(result.toString());
+		// System.out.println(result.toString());
 	}
 }

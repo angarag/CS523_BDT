@@ -3,19 +3,17 @@ package bdt.mars.project.v1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.TaskContext;
 import org.apache.spark.api.java.*;
-import org.apache.spark.api.java.function.*;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.*;
 import org.apache.spark.streaming.kafka010.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import scala.Tuple2;
@@ -27,7 +25,16 @@ public class Consumer {
 	static String fileName = "input/election_votes.txt";
 	static File file = new File(fileName);
 
-	public static void main(String args[]) throws InterruptedException, FileNotFoundException, IOException {
+	static void init() throws IOException {
+		PrintWriter writer = new PrintWriter(file);
+		writer.print("");
+		writer.close();
+		HTTPPostSender.init();
+	}
+
+	public static void main(String args[]) throws InterruptedException,
+			FileNotFoundException, IOException {
+		init();
 		Logger.getLogger("org").setLevel(Level.OFF);
 		Logger.getLogger("akka").setLevel(Level.OFF);
 		Map<String, Object> kafkaParams = new HashMap<>();
@@ -37,8 +44,7 @@ public class Consumer {
 		kafkaParams.put("group.id", "use_a_separate_group_id_for_each_stream");
 		kafkaParams.put("auto.offset.reset", "latest");
 		kafkaParams.put("enable.auto.commit", false);
-		HTTPPostSender.init();
-		
+
 		Collection<String> topics = Arrays.asList("test", "election");
 		SparkConf conf = new SparkConf().setAppName("kafka-sandbox").setMaster(
 				"local[*]");
