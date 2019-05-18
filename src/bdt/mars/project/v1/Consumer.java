@@ -55,8 +55,8 @@ public class Consumer {
 			helper(vote);
 			return new Tuple2<>(record.key(), 1);
 		})
-				.reduceByKeyAndWindow((i1, i2) -> i1 + i2, new Duration(30000),
-						new Duration(500)).print();
+				.reduceByKeyAndWindow((i1, i2) -> i1 + i2,
+						new Duration(1000 * 60 * 5), new Duration(500)).print();
 		ssc.start(); // Start the computation
 		ssc.awaitTermination(); // Wait for the computation to terminate
 	}
@@ -67,7 +67,8 @@ public class Consumer {
 		String user = vote_record[1];
 		String timestamp = vote_record[2];
 		// save into ElasticSearch
-		
+		String[] args = { user, candidate, "1", timestamp };
+		HTTPPostSender.saveToES(args);
 		// append into input/election_votes.txt
 		String row = candidate + "" + user + "" + timestamp + "\n";
 		FileUtils.writeStringToFile(file, row, StandardCharsets.UTF_8, true);
