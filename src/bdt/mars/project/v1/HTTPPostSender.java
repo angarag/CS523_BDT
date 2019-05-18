@@ -33,11 +33,12 @@ public class HTTPPostSender {
 	}
 
 	public static void saveToES(String args[]) {
-		String who = args[0];
-		String voteFor = args[1];
-		String count = args[2];
-		String timestamp = args[3];
-		String restUrl = es_url + who + "_" + voteFor;
+		String who = args[1];
+		String voteFor = args[0];
+		String count = args[4];
+		String _id = args[3];
+		String timestamp = args[2];
+		String restUrl = es_url + _id;
 		String username = "elastic";
 		JSONObject user = new JSONObject();
 		user.put("voteFor", voteFor);

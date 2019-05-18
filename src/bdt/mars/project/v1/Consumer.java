@@ -30,6 +30,7 @@ public class Consumer {
 		writer.print("");
 		writer.close();
 		HTTPPostSender.init();
+		HBaseUtil.init();
 	}
 
 	public static void main(String args[]) throws InterruptedException,
@@ -55,30 +56,34 @@ public class Consumer {
 				.createDirectStream(ssc, LocationStrategies.PreferConsistent(),
 						ConsumerStrategies.<String, String> Subscribe(topics,
 								kafkaParams));
-		String[] vote = new String[3];
-		stream.mapToPair(record -> {
-			vote[0] = record.key();
-			vote[1] = record.value().split(",")[0];
-			vote[2] = record.value().split(",")[1];
-			helper(vote);
-			return new Tuple2<>(record.key(), 1);
-		})
-				.reduceByKeyAndWindow((i1, i2) -> i1 + i2,
-						new Duration(1000 * 60 * 5), new Duration(500)).print();
+		String[] vote = new String[5];
+		JavaPairDStream<String, Integer> vote_stream = stream.mapToPair(
+				record -> {
+					vote[0] = record.key();// voteFor
+					vote[1] = record.value().split(",")[0];// user
+					vote[2] = record.value().split(",")[1];// timestamp
+					vote[3] = vote[0] + "," + vote[1];
+					vote[4] = "1";
+					helper(vote);
+					return new Tuple2<>(record.key(), 1);
+				}).cache();
+		// vote_stream.saveAsHadoopFiles("/home/cloudera", "kafka_output");
+		vote_stream.reduceByKeyAndWindow((i1, i2) -> i1 + i2,
+				new Duration(1000 * 60 * 5), new Duration(500)).print();
 		ssc.start(); // Start the computation
 		ssc.awaitTermination(); // Wait for the computation to terminate
 	}
 
 	public static void helper(String[] vote_record) throws IOException {
 		// System.out.println(Arrays.toString(vote_record));
-		String candidate = vote_record[0];
-		String user = vote_record[1];
-		String timestamp = vote_record[2];
 		// save into ElasticSearch
-		String[] args = { user, candidate, "1", timestamp };
-		HTTPPostSender.saveToES(args);
+		HTTPPostSender.saveToES(vote_record);
+		// save into HBase election table
+		HBaseUtil.saveRecord(vote_record);
 		// append into input/election_votes.txt
-		String row = candidate + "" + user + "" + timestamp + "\n";
+		String row = vote_record[0] + "" + vote_record[1] + ""
+				+ vote_record[2] + "\n";
+
 		FileUtils.writeStringToFile(file, row, StandardCharsets.UTF_8, true);
 	}
 }
