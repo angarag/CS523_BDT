@@ -23,7 +23,6 @@ public class HBaseUtil {
 	static HTable hTable;
 
 	public static void init() throws IOException {
-
 		config = HBaseConfiguration.create();
 		hTable = new HTable(config, TABLE_NAME);
 
@@ -31,8 +30,7 @@ public class HBaseUtil {
 				Admin admin = connection.getAdmin()) {
 			HTableDescriptor table = new HTableDescriptor(
 					TableName.valueOf(TABLE_NAME));
-			table.addFamily(new HColumnDescriptor(CF_DEFAULT)
-					.setCompressionType(Algorithm.NONE).setMaxVersions(7));
+			table.addFamily(new HColumnDescriptor(CF_DEFAULT));
 
 			System.out.print("Creating table.... ");
 
@@ -42,23 +40,22 @@ public class HBaseUtil {
 			}
 			admin.createTable(table);
 			System.out.println(" Done!");
+		}catch(Exception e){
+			System.out.println("creating table failed");
 		}
 	}
 
 	public static void main(String[] args) throws IOException{
 		init();
+		cleanup();
 	}
 	public static void saveRecord(String[] current) throws IOException {
-		System.out.print("Inserting data to the table.... ");
 		Put puts = new Put(helper(current[3]));
 		puts.add(helper(CF_DEFAULT), helper("voteFor"), helper(current[0]));
 		puts.add(helper(CF_DEFAULT), helper("user"), helper(current[1]));
 		puts.add(helper(CF_DEFAULT), helper("timestamp"), helper(current[2]));
 		puts.add(helper(CF_DEFAULT), helper("count"), helper(current[4]));
 		hTable.put(puts);
-		System.out.println(" Done!");
-		System.out.println("Updating data in the table.... ");
-
 		hTable.flushCommits();
 
 	}
