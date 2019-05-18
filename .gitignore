@@ -7,3 +7,4 @@
 /metastore_db/
 /target/
 *.log
+/conf/

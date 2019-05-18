@@ -1,10 +1,13 @@
 package bdt.mars.project.v1;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.Properties;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
@@ -15,15 +18,25 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.simple.JSONObject;
 
 public class HTTPPostSender {
+	private static String es_url;
+	private static String es_password;
+	public static void init() throws FileNotFoundException, IOException{
+		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+		String appConfigPath = rootPath + "/../../conf/app.properties";
+		 
+		Properties appProps = new Properties();
+		appProps.load(new FileInputStream(appConfigPath));
+		es_url = appProps.getProperty("url");
+		es_password =appProps.getProperty("password");
+	}
 	public static void saveToES(String args[]) {
 		String who = args[0];
 		String voteFor = args[1];
 		String count = args[2];
 		String timestamp = args[3];
-		String restUrl = "https://c8d08836a88346e6894f02cc722ed09a.us-central1.gcp.cloud.es.io:9243/election/_doc/"
+		String restUrl = es_url
 				+ who+"_" + voteFor;
 		String username = "elastic";
-		String password = "QgEzVuUrUePRILVY1Zl59kJ6";
 		JSONObject user = new JSONObject();
 		user.put("voteFor", voteFor);
 		user.put("count", count);
@@ -31,7 +44,7 @@ public class HTTPPostSender {
 		String jsonData = user.toString();
 		HTTPPostSender httpPostReq = new HTTPPostSender();
 		HttpPost httpPost = httpPostReq.createConnectivity(restUrl, username,
-				password);
+				es_password);
 		httpPostReq.executeReq(jsonData, httpPost);
 	}
 
