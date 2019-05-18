@@ -4,7 +4,7 @@ PUT /election1
   "mappings": {
     "properties": {
       "voteFor": {
-        "type": "text"
+        "type": "keyword"
       },
       "timestamp": {
         "type": "date",
