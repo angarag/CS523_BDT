@@ -40,15 +40,16 @@ public class HBaseUtil {
 			}
 			admin.createTable(table);
 			System.out.println(" Done!");
-		}catch(Exception e){
+		} catch (Exception e) {
 			System.out.println("creating table failed");
 		}
 	}
 
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException {
 		init();
 		cleanup();
 	}
+
 	public static void saveRecord(String[] current) throws IOException {
 		Put puts = new Put(helper(current[3]));
 		puts.add(helper(CF_DEFAULT), helper("voteFor"), helper(current[0]));
