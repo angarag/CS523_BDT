@@ -16,7 +16,7 @@ public class HiveUtil {
 				.config("spark.master", "local").enableHiveSupport()
 				.getOrCreate();
 
-		spark.sql("CREATE TABLE IF NOT EXISTS vote (candidate STRING, user STRING, date TIMESTAMP) USING hive");
+		spark.sql("CREATE TABLE IF NOT EXISTS vote (voteFor STRING, user STRING, date TIMESTAMP, count INT) USING hive");
 		spark.sql("LOAD DATA LOCAL INPATH 'input/election_votes.txt' OVERWRITE INTO TABLE vote");
 		// spark.sql("LOAD DATA INPATH 'user/cloudera/input/election_votes.txt' OVERWRITE INTO TABLE vote");
 		// spark.sql("SELECT candidate,COUNT(*) FROM vote GROUP BY candidate").show();
