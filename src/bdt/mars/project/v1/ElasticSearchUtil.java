@@ -21,11 +21,14 @@ public class ElasticSearchUtil {
 	private static String es_url;
 	private static String es_password;
 
-	public static void init() throws FileNotFoundException, IOException {
+	public static void init(String path) throws FileNotFoundException, IOException {
 		String rootPath = Thread.currentThread().getContextClassLoader()
 				.getResource("").getPath();
-		String appConfigPath = rootPath + "/../../conf/app.properties";
-
+		String appConfigPath;
+		if(path==null)
+		appConfigPath = rootPath + "/../../conf/app.properties";
+		else 
+		appConfigPath = "conf/app.properties";
 		Properties appProps = new Properties();
 		appProps.load(new FileInputStream(appConfigPath));
 		es_url = appProps.getProperty("url");
@@ -34,7 +37,7 @@ public class ElasticSearchUtil {
 
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
-		init();
+		init("");
 		String[] arr = { "Arya", "Mars", "1515", "Ayra-Mars", "777" };
 		saveToES(arr);
 	}

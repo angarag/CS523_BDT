@@ -29,7 +29,7 @@ public class Consumer {
 		PrintWriter writer = new PrintWriter(file);
 		writer.print("");
 		writer.close();
-		ElasticSearchUtil.init();
+		ElasticSearchUtil.init("");
 		HBaseUtil.init();
 	}
 
