@@ -32,6 +32,11 @@ public class ElasticSearchUtil {
 		es_password = appProps.getProperty("password");
 	}
 
+	public static void main(String[] args) throws FileNotFoundException, IOException{
+		init();
+		String[] arr = {"Arya","Mars","1515","Ayra-Mars","777"};
+		saveToES(arr);
+	}
 	public static void saveToES(String args[]) {
 		String who = args[1];
 		String voteFor = args[0];

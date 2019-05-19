@@ -32,7 +32,7 @@ public class HBaseUtil {
 					TableName.valueOf(TABLE_NAME));
 			table.addFamily(new HColumnDescriptor(CF_DEFAULT));
 
-			System.out.print("Creating table.... ");
+			System.out.print("Creating HBase table.... ");
 
 			if (admin.tableExists(table.getTableName())) {
 				admin.disableTable(table.getTableName());
@@ -41,7 +41,7 @@ public class HBaseUtil {
 			admin.createTable(table);
 			System.out.println(" Done!");
 		} catch (Exception e) {
-			System.out.println("creating table failed");
+			System.out.println("Creating HBase table failed");
 		}
 	}
 

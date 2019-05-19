@@ -26,4 +26,7 @@ public class Names {
 	public static int giveMeSize() {
 		return names.length;
 	}
+	public static void main(String[] args){
+		System.out.println("hi");
+	}
 }

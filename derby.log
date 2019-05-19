@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Sat May 18 20:41:07 PDT 2019:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-016a-ce2d-bf52-000006018d98 
-on database directory /home/cloudera/workspace/CS523_BDT/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@1bd0b0e5 
+Sun May 19 12:04:34 PDT 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-016a-d17b-3377-00000ba894b8 
+on database directory /home/cloudera/workspace/CS523_BDT/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@6b667cb3 
 Loaded from file:/home/cloudera/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_212-b04
 user.dir=/home/cloudera/workspace/CS523_BDT
 os.name=Linux
 os.arch=amd64
-os.version=2.6.32-754.12.1.el6.x86_64
+os.version=2.6.32-573.el6.x86_64
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
