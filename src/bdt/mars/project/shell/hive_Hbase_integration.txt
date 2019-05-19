@@ -1,1 +1,3 @@
-create external table election(id STRING, voteFor STRING, user STRING, count STRING, date TIMESTAMP) ROW FORMAT SERDE 'org.apache.hadoop.hive.hbase.HBaseSerDe' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES("hbase.columns.mapping" = ":key,vote_details:voteFor,vote_details:user,vote_details:count,vote_details:timestamp") TBLPROPERTIES("hbase.table.name"="election");
+/usr/lib/hive/bin/schematool -initSchema -dbType mysql
+
+CREATE EXTERNAL TABLE election(id STRING, voteFor STRING, user STRING, count STRING, date TIMESTAMP) ROW FORMAT SERDE 'org.apache.hadoop.hive.hbase.HBaseSerDe' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES("hbase.columns.mapping" = ":key,vote_details:voteFor,vote_details:user,vote_details:count,vote_details:timestamp") TBLPROPERTIES("hbase.table.name"="election");
