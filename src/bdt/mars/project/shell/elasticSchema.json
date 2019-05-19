@@ -1,5 +1,5 @@
 //sudo -i service elasticsearch start
-PUT /election1
+PUT /election
 {
   "mappings": {
     "properties": {

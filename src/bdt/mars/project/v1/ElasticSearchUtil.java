@@ -17,7 +17,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.simple.JSONObject;
 
-public class HTTPPostSender {
+public class ElasticSearchUtil {
 	private static String es_url;
 	private static String es_password;
 
@@ -45,7 +45,7 @@ public class HTTPPostSender {
 		user.put("count", count);
 		user.put("timestamp", timestamp);
 		String jsonData = user.toString();
-		HTTPPostSender httpPostReq = new HTTPPostSender();
+		ElasticSearchUtil httpPostReq = new ElasticSearchUtil();
 		HttpPost httpPost = httpPostReq.createConnectivity(restUrl, username,
 				es_password);
 		httpPostReq.executeReq(jsonData, httpPost);

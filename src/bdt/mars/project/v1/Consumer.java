@@ -29,7 +29,7 @@ public class Consumer {
 		PrintWriter writer = new PrintWriter(file);
 		writer.print("");
 		writer.close();
-		HTTPPostSender.init();
+		ElasticSearchUtil.init();
 		HBaseUtil.init();
 	}
 
@@ -77,7 +77,7 @@ public class Consumer {
 	public static void helper(String[] vote_record) throws IOException {
 		// System.out.println(Arrays.toString(vote_record));
 		// save into ElasticSearch
-		HTTPPostSender.saveToES(vote_record);
+		ElasticSearchUtil.saveToES(vote_record);
 		// save into HBase election table
 		HBaseUtil.saveRecord(vote_record);
 		// append into input/election_votes.txt
