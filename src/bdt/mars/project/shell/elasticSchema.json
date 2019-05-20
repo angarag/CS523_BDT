@@ -1,4 +1,6 @@
 //sudo -i service elasticsearch start
+DELETE /election
+ok
 PUT /election
 {
   "mappings": {

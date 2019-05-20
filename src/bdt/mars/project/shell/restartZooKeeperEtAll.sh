@@ -8,8 +8,7 @@ sudo service hbase-regionserver start
 sudo service hbase-master stop
 sudo service hbase-master start
 
-#Stop Kafka
-sudo fuser -k -n tcp 9092
+#Restart Kafka by running Kafka/restartKafka.sh
 
 #Kill processes by port (ZooKeeper:2181, Kafka: 9092)
 #sudo fuser -k -n tcp 9092
