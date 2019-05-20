@@ -1,5 +1,6 @@
-# CS523_BDT - Live election result 
+# CS523_BDT - Live election result & all assignment and labs
 This is the project Angarag Batjargal did as his final project for the Big Data Technology course taught in May block, 2019.   
+You can also find the course assignment and labs.
 
 ## Project description 
 
