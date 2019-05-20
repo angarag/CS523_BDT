@@ -11,3 +11,5 @@ bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic election --from-beginning
 #Producer with piped message
 bin/kafka-console-producer.sh --broker-list localhost:9092 --topic election < message.txt
+#Delete topic
+./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic election

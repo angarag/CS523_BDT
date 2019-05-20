@@ -20,6 +20,7 @@ public class Producer {
 		String[] candidates = { "Arya", "Jon", "Sansa", "Bran", "Daenerys" };
 		int csize = candidates.length;
 		int usize = Names.giveMeSize();
+		System.out.println("Producer started");
 		for (int i = 0; i < usize * 100; i++) {
 			ProducerRecord<String, String> data;
 			double random_candidate = Math.random() * csize;
@@ -29,11 +30,11 @@ public class Producer {
 					candidates[(int) random_candidate], new String(
 							Names.giveMeName(random_user) + ","
 									+ timestamp.getTime()));
-			// System.out.println(candidates[(int)
-			// random_candidate]+":"+Names.giveMeName(random_user) + "," +
-			// timestamp.getTime());
+			 System.out.println(candidates[(int)
+			 random_candidate]+":"+Names.giveMeName(random_user) + "," +
+			 timestamp.getTime());
 			producer.send(data);
-			Thread.sleep(500);
+			Thread.sleep(50);
 		}
 		producer.close();
 	}
