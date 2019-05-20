@@ -8,65 +8,57 @@ This program is to show a Live election result of user votes. Users are to vote 
 ## Program environment 
 ### The followings are used in the program: 
 
--Java 1.8 
+- Java 1.8 
 
--Kafka 2.2.0 
+- Kafka 2.2.0 
 
--Spark 2.2.2 
+- Spark 2.2.2 
 
--HBase 
+- HBase 
 
--Hive 
+- Hive 
 
--ElasticSearch & Kibana on the cloud 
+- ElasticSearch & Kibana on the cloud 
 
 Please see the pom file for the version details. 
 
 ## Project parts & the breakdown structure of the program: 
 
-The related sub-programs & Interfaces 
+The related sub-programs & Interfaces:
 
-1 – Spark Streaming 
+1. Spark Streaming - Consumer & Producer 
 
-Consumer & Producer 
+2. SparkSQL with HBase/Hive - HbaseUtil, HiveUtil 
 
-2 – SparkSQL with HBase/Hive 
+3. GUI - ElasticSearchUtil, ElasticSearch.co & Kibana 
 
-HbaseUtil, HiveUtil 
-
-3 - GUI 
-
-ElasticSearchUtil, ElasticSearch.co & Kibana 
-
-4 - Kafka 
-
-Consumer, Producer 
+4. Kafka - Consumer, Producer 
 
 ## Source code 
 
 It is a Maven project. So once it is added into your IDE, you can export it as a runnable jar. This project consists of the following Java classes: 
 
--Consumer (Spark Streaming as a Kafka consumer) 
+- Consumer (Spark Streaming as a Kafka consumer) 
 
--Producer (Kafka message producer, emits random messages) 
+- Producer (Kafka message producer, emits random messages) 
 
--ElasticSearchUtil (ElasticSearch client to save record into the cloud service of ElasticSearch.co) 
+- ElasticSearchUtil (ElasticSearch client to save record into the cloud service of ElasticSearch.co) 
 
--HBaseUtil (HBase utility to save kafka message record to HBase database) 
+- HBaseUtil (HBase utility to save kafka message record to HBase database) 
 
--HiveUtil (SparkSQL client to query HBase table) 
+- HiveUtil (SparkSQL client to query HBase table) 
 
--Names (the most common 100 first names in the USA) 
+- Names (the most common 100 first names in the USA) 
 
 First let me define the parameters I used: 
 
--VoteFor – Election candidate, one of the random names of “Arya, Sansa, Jon, Daenerys, Cersei” defined in Producer class 
+- VoteFor – Election candidate, one of the random names of “Arya, Sansa, Jon, Daenerys, Cersei” defined in Producer class 
 
--User – One of the random user from the Names class 
+- User – One of the random user from the Names class 
 
--Timestamp – the timestamp when user votes for candidate 
+- Timestamp – the timestamp when user votes for candidate 
 
--Count – it is by default 1. the number of points/votes user votes for his/her favourite candidate 
+- Count – it is by default 1. the number of points/votes user votes for his/her favourite candidate 
 
 I will explain the Java classes one by one: 
 
@@ -80,15 +72,15 @@ It emits a message in the following format every 0.5 second until it receives te
 
 Consumer class listens to the emitted Kafka messages with Spark Streaming every 0.5 second 
 
---Group Kafka messages by the candidate with window size 5 minutes 
+- Group Kafka messages by the candidate with window size 5 minutes 
 
---Show the grouped message in the console 
+- Show the grouped message in the console 
 
---Save message to Elastic search 
+- Save message to Elastic search 
 
---Save message to HBase 
+- Save message to HBase 
 
---Save log to local file 
+- Save log to local file 
 
 ## HBaseUtil 
 
@@ -115,30 +107,30 @@ Create configuration file named app.properties under conf folder with the follow
 url=$elasticsearch_url/election/_doc/ 
 password= $elasticsearch_password 
 ```
--Create input directory where you run the program 
+- Create input directory where you run the program 
 
--Create Kafka topic named “election” 
+- Create Kafka topic named “election” 
 
--Create election table in HBase with column family “vote_details” 
+- Create election table in HBase with column family “vote_details” 
 
--Create Hive-Hbase mapping by using the hive script in the Hive-HBase integration text file 
+- Create Hive-Hbase mapping by using the hive script in the Hive-HBase integration text file 
 
---Refer to hive-Hbase_integration.txt file 
+-- Refer to hive-Hbase_integration.txt file 
 ```
 CREATE EXTERNAL TABLE election(id STRING, voteFor STRING, user STRING, count STRING, date TIMESTAMP) ROW FORMAT SERDE 'org.apache.hadoop.hive.hbase.HBaseSerDe' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES("hbase.columns.mapping" = ":key,vote_details:voteFor,vote_details:user,vote_details:count,vote_details:timestamp") TBLPROPERTIES("hbase.table.name"="election"); 
 ```
 
--HBase: election:vote_details(key,voteFor,user,count,timestamp) 
+- HBase: election:vote_details(key,voteFor,user,count,timestamp) 
 
 -=> Hive:election(id,voteFor,user,count,date) 
 
 Copy hive-site.xml file (located in /usr/lib/hive/conf) to the src folder of the program so that the program can find hive settings 
 
-1) First we need to run the Kafka by running the Kafka shell named runKafka.sh 
+1. First we need to run the Kafka by running the Kafka shell named runKafka.sh 
 
-2) Now we can produce Kafka messages on the topic “election” by running the Producer class 
+2. Now we can produce Kafka messages on the topic “election” by running the Producer class 
 
-3) We can run the following shell scripts to start Producer, Consumer and HiveUtil: 
+3. We can run the following shell scripts to start Producer, Consumer and HiveUtil: 
 
 Shell scrip1: /shell/prepare_environment.sh 
 
@@ -157,13 +149,13 @@ It is assumed that the program is exported as a single runnable jar named “CS5
 
 # How to terminate the program: 
 
--Terminate Producer program 
+- Terminate Producer program 
 
--Terminate Consumer program 
+- Terminate Consumer program 
 
--Stop Kafka shell 
+- Stop Kafka shell 
 
--Stop refresh rate on ElasticSearch – Kibana dashboard 
+- Stop refresh rate on ElasticSearch – Kibana dashboard 
 
 # Commands 
 
@@ -197,9 +189,9 @@ Run “hbase shell” command and enter “scan ‘election’”
 
 ## To check Hive, HBase connection: 
 
--Run HiveUtil class (it will create election table) 
+- Run HiveUtil class (it will create election table) 
 
--Run HBaseUtil class (it will create election table) 
+- Run HBaseUtil class (it will create election table) 
 
 ## Target host is null when sending HTTP request to ElasticSearch 
 
