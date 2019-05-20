@@ -17,7 +17,7 @@ public class Producer {
 				"org.apache.kafka.common.serialization.StringSerializer");
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(
 				props);
-		String[] candidates = { "Arya", "Jon", "Sansa", "Cersei", "Daenerys" };
+		String[] candidates = { "Arya", "Jon", "Sansa", "Bran", "Daenerys" };
 		int csize = candidates.length;
 		int usize = Names.giveMeSize();
 		for (int i = 0; i < usize * 100; i++) {
