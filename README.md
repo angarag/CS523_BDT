@@ -217,7 +217,7 @@ clip < ~/.ssh/id_rsa.pub
 
 ## Elastic credentials in conf/app.properties: 
 ```
-password=ILhRhmggITmEyuu8na8vKOsN 
+password=$your_elastic_search_password
 url=https://c8d08836a88346e6894f02cc722ed09a.us-central1.gcp.cloud.es.io:9243/election/_doc 
 ```
 You can refer to the shell scripts in the shell directory which automates all these preparations. 
