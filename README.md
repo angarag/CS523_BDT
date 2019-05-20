@@ -79,8 +79,8 @@ I will explain the Java classes one by one:
 
 It emits a message in the following format every 0.5 second until it receives termination request. 
 
-Key, Value: “voteFor”, “user,timestamp” 
-
+```Key, Value: “voteFor”, “user,timestamp” 
+```
 #Consumer program 
 
 Consumer class listens to the emitted Kafka messages with Spark Streaming every 0.5 second 
@@ -116,11 +116,10 @@ Create index “election” & type “_doc” on Elastic Search & Create index o
 Refer to the elasticSchema.json file in the source folder. 
 
 Create configuration file named app.properties under conf folder with the following parameters: (Note that “/election/_doc/ is appended to the ElasticSearch url” 
-
--url=$elasticsearch_url/election/_doc/ 
-
--password= $elasticsearch_password 
-
+```
+url=$elasticsearch_url/election/_doc/ 
+password= $elasticsearch_password 
+```
 -Create input directory where you run the program 
 
 -Create Kafka topic named “election” 
@@ -130,10 +129,9 @@ Create configuration file named app.properties under conf folder with the follow
 -Create Hive-Hbase mapping by using the hive script in the Hive-HBase integration text file 
 
 --Refer to hive-Hbase_integration.txt file 
-
+```
 CREATE EXTERNAL TABLE election(id STRING, voteFor STRING, user STRING, count STRING, date TIMESTAMP) ROW FORMAT SERDE 'org.apache.hadoop.hive.hbase.HBaseSerDe' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES("hbase.columns.mapping" = ":key,vote_details:voteFor,vote_details:user,vote_details:count,vote_details:timestamp") TBLPROPERTIES("hbase.table.name"="election"); 
-
- 
+```
 
 -HBase: election:vote_details(key,voteFor,user,count,timestamp) 
 
@@ -152,19 +150,14 @@ Shell scrip1: /shell/prepare_environment.sh
 Shell script2: /shell/run.sh 
 
 #After exporting it as a runnable jar, run the followings:,  
-
+```
 spark-submit --class bdt.mars.project.v1.Producer --master yarn CS523_986689.jar 
-
 sleep 3s 
-
 mkdir input 
-
 spark-submit --class bdt.mars.project.v1.Consumer --master yarn CS523_986689.jar 
-
 sleep 30s 
-
 spark-submit --class bdt.mars.project.v1.HiveUtil --master yarn CS523_986689.jar 
-
+```
 It is assumed that the program is exported as a single runnable jar named “CS523_986689.jar”.  
 
 #How to terminate the program: 
@@ -201,11 +194,11 @@ Run “hbase shell” command and enter “scan ‘election’”
 
 *Hive permission issue on /tmp/hive directory  
 
---> Enable hive directory: “sudo chmod 777 /tmp/hive” 
+--> Enable hive directory: ```sudo chmod 777 /tmp/hive ```
 
 *Address already in use issue: 
 
--> Kill the previous process: “sudo fuser –k –n tlp $port” 
+-> Kill the previous process: ```sudo fuser –k –n tlp $port ```
 
 *To check Hive, HBase connection: 
 
@@ -224,26 +217,21 @@ Run “hbase shell” command and enter “scan ‘election’”
 #Useful guides for preparing environment 
 
 -How to install Java  8 on Centos 6 
-
---sudo yum install java-1.8.0-openjdk –y 
-
---sudo vi /etc/profile  //Change the JAVA_HOME 
-
---source /etc/profile //Or re-login to make the new JAVA_HOME effective 
-
+```
+sudo yum install java-1.8.0-openjdk –y
+sudo vi /etc/profile  //Change the JAVA_HOME 
+source /etc/profile //Or re-login to make the new JAVA_HOME effective 
+```
 #How to configure Github SSH 
-
--ssh-keygen -t rsa -b 4096 -C your_email@example.com 
-
--ssh-add ~/.ssh/id_rsa 
-
--clip < ~/.ssh/id_rsa.pub 
-
+```
+ssh-keygen -t rsa -b 4096 -C your_email@example.com 
+ssh-add ~/.ssh/id_rsa 
+clip < ~/.ssh/id_rsa.pub 
+```
 
 *Elastic credentials in conf/app.properties: 
-
--password=ILhRhmggITmEyuu8na8vKOsN 
-
--url=https://c8d08836a88346e6894f02cc722ed09a.us-central1.gcp.cloud.es.io:9243/election/_doc 
-
+```
+password=ILhRhmggITmEyuu8na8vKOsN 
+url=https://c8d08836a88346e6894f02cc722ed09a.us-central1.gcp.cloud.es.io:9243/election/_doc 
+```
 You can refer to the shell scripts in the shell directory which automates all these preparations. 
